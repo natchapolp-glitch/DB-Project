@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "node server.js",
     "test": "jest --verbose --forceExit --detectOpenHandles",
-    "init-db": "node -e \"const fs=require('fs');const mysql=require('mysql2/promise');(async()=>{const c=await mysql.createConnection({host:process.env.MYSQL_HOST||'localhost',port:parseInt(process.env.MYSQL_PORT||'3306'),user:process.env.MYSQL_USER||'root',password:process.env.MYSQL_PASSWORD||'167349943167',multipleStatements:true});const sql=fs.readFileSync('init-db.sql','utf8');await c.query(sql);console.log('Database initialized!');await c.end();})()\""
+    "init-db": "node -e \"const fs=require('fs');const mysql=require('mysql2/promise');(async()=>{const c=await mysql.createConnection({host:process.env.MYSQLHOST||process.env.MYSQL_HOST||'localhost',port:parseInt(process.env.MYSQLPORT||process.env.MYSQL_PORT||'3306'),user:process.env.MYSQLUSER||process.env.MYSQL_USER||'root',password:process.env.MYSQLPASSWORD||process.env.MYSQL_PASSWORD||'167349943167',multipleStatements:true});const sql=fs.readFileSync('init-db.sql','utf8');await c.query(sql);console.log('Database initialized!');await c.end();})()\""
   },
   "engines": {
     "node": ">=18.0.0"
