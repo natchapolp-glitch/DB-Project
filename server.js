@@ -12,7 +12,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ----- MySQL Connection Pool -----
-const pool = mysql.createPool({
+// ----- MySQL Connection Pool -----
+const dbConfig = process.env.DATABASE_URL || {
   host: process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost',
   port: parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || '3306'),
   user: process.env.MYSQLUSER || process.env.MYSQL_USER || 'root',
@@ -21,7 +22,8 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   charset: 'utf8mb4'
-});
+};
+const pool = mysql.createPool(dbConfig);
 
 // ===================== GUEST API =====================
 
