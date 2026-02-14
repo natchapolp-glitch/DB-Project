@@ -12,151 +12,151 @@ let checkoutStayId = null;
 
 // ===== Utilities =====
 function formatDate(d) {
-    if (!d) return '-';
-    const dt = new Date(d);
-    return dt.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+  if (!d) return '-';
+  const dt = new Date(d);
+  return dt.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 function formatDateTime(d) {
-    if (!d) return '-';
-    const dt = new Date(d);
-    return dt.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' }) +
-        ' ' + dt.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+  if (!d) return '-';
+  const dt = new Date(d);
+  return dt.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' }) +
+    ' ' + dt.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
 }
 
 function formatMoney(n) {
-    return parseFloat(n || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 });
+  return parseFloat(n || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 });
 }
 
 function paymentTypeLabel(t) {
-    const m = {
-        'ROOM_CHARGE': 'ค่าห้อง',
-        'LATE_FEE': 'ค่าปรับเกินเวลา',
-        'DEPOSIT': 'เงินมัดจำ',
-        'DEPOSIT_RETURN': 'คืนเงินมัดจำ',
-        'OTHER': 'อื่นๆ'
-    };
-    return m[t] || t;
+  const m = {
+    'ROOM_CHARGE': 'ค่าห้อง',
+    'LATE_FEE': 'ค่าปรับเกินเวลา',
+    'DEPOSIT': 'เงินมัดจำ',
+    'DEPOSIT_RETURN': 'คืนเงินมัดจำ',
+    'OTHER': 'อื่นๆ'
+  };
+  return m[t] || t;
 }
 
 function methodLabel(m) {
-    const labels = { 'CASH': 'เงินสด', 'TRANSFER': 'โอนเงิน', 'CREDIT_CARD': 'บัตรเครดิต' };
-    return labels[m] || m;
+  const labels = { 'CASH': 'เงินสด', 'TRANSFER': 'โอนเงิน', 'CREDIT_CARD': 'บัตรเครดิต' };
+  return labels[m] || m;
 }
 
 function bedTypeLabel(t) {
-    return t === 'single' ? 'เตียงเดี่ยว' : 'เตียงคู่';
+  return t === 'single' ? 'เตียงเดี่ยว' : 'เตียงคู่';
 }
 
 function statusLabel(s) {
-    const m = { 'AVAILABLE': 'ว่าง', 'OCCUPIED': 'มีผู้เข้าพัก', 'CLEANING': 'ทำความสะอาด' };
-    return m[s] || s;
+  const m = { 'AVAILABLE': 'ว่าง', 'OCCUPIED': 'มีผู้เข้าพัก', 'CLEANING': 'ทำความสะอาด' };
+  return m[s] || s;
 }
 
 // ===== Toast =====
 function showToast(message, type = 'success') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-    toast.innerHTML = `<span>${icons[type] || ''}</span> ${message}`;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+  toast.innerHTML = `<span>${icons[type] || ''}</span> ${message}`;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }
 
 // ===== API Helpers =====
 async function apiGet(url) {
-    const res = await fetch(`${API}${url}`);
-    if (!res.ok) throw new Error((await res.json()).error || 'Request failed');
-    return res.json();
+  const res = await fetch(`${API}${url}`);
+  if (!res.ok) throw new Error((await res.json()).error || 'Request failed');
+  return res.json();
 }
 
 async function apiPost(url, data) {
-    const res = await fetch(`${API}${url}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    });
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.error || 'Request failed');
-    return json;
+  const res = await fetch(`${API}${url}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Request failed');
+  return json;
 }
 
 async function apiPut(url, data) {
-    const res = await fetch(`${API}${url}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    });
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.error || 'Request failed');
-    return json;
+  const res = await fetch(`${API}${url}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Request failed');
+  return json;
 }
 
 async function apiDelete(url) {
-    const res = await fetch(`${API}${url}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error((await res.json()).error || 'Request failed');
-    return res.json();
+  const res = await fetch(`${API}${url}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error((await res.json()).error || 'Request failed');
+  return res.json();
 }
 
 // ===== Navigation =====
 function navigateTo(page) {
-    currentPage = page;
+  currentPage = page;
 
-    // Update nav
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.toggle('active', item.dataset.page === page);
-    });
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.page === page);
+  });
 
-    // Update pages
-    document.querySelectorAll('.page-section').forEach(sec => {
-        sec.classList.toggle('active', sec.id === `page-${page}`);
-    });
+  // Update pages
+  document.querySelectorAll('.page-section').forEach(sec => {
+    sec.classList.toggle('active', sec.id === `page-${page}`);
+  });
 
-    // Update header
-    const titles = {
-        dashboard: ['แดชบอร์ด', 'ภาพรวมระบบจัดการแมนชั่น'],
-        rooms: ['จัดการห้องพัก', 'ดูสถานะและจัดการห้องพักทั้งหมด'],
-        guests: ['จัดการผู้เข้าพัก', 'เพิ่ม แก้ไข ลบข้อมูลผู้เข้าพัก'],
-        checkin: ['เช็คอิน', 'บันทึกการเข้าพักใหม่'],
-        checkout: ['เช็คเอาท์', 'บันทึกการออกจากห้องพัก'],
-        payments: ['การชำระเงิน', 'ประวัติการชำระเงินทั้งหมด'],
-        reports: ['รายงานรายเดือน', 'สรุปข้อมูลเชิงบริหาร']
-    };
-    const [title, subtitle] = titles[page] || ['', ''];
-    document.getElementById('page-title').textContent = title;
-    document.getElementById('page-subtitle').textContent = subtitle;
+  // Update header
+  const titles = {
+    dashboard: ['แดชบอร์ด', 'ภาพรวมระบบจัดการแมนชั่น'],
+    rooms: ['จัดการห้องพัก', 'ดูสถานะและจัดการห้องพักทั้งหมด'],
+    guests: ['จัดการผู้เข้าพัก', 'เพิ่ม แก้ไข ลบข้อมูลผู้เข้าพัก'],
+    checkin: ['เช็คอิน', 'บันทึกการเข้าพักใหม่'],
+    checkout: ['เช็คเอาท์', 'บันทึกการออกจากห้องพัก'],
+    payments: ['การชำระเงิน', 'ประวัติการชำระเงินทั้งหมด'],
+    reports: ['รายงานรายเดือน', 'สรุปข้อมูลเชิงบริหาร']
+  };
+  const [title, subtitle] = titles[page] || ['', ''];
+  document.getElementById('page-title').textContent = title;
+  document.getElementById('page-subtitle').textContent = subtitle;
 
-    // Load data
-    loadPageData(page);
+  // Load data
+  loadPageData(page);
 }
 
 function loadPageData(page) {
-    switch (page) {
-        case 'dashboard': loadDashboard(); break;
-        case 'rooms': loadRooms(); break;
-        case 'guests': loadGuests(); break;
-        case 'checkin': loadCheckinRooms(); resetCheckinFlow(); break;
-        case 'checkout': loadActiveStays(); break;
-        case 'payments': loadPayments(); break;
-        case 'reports': break; // manual load
-    }
+  switch (page) {
+    case 'dashboard': loadDashboard(); break;
+    case 'rooms': loadRooms(); break;
+    case 'guests': loadGuests(); break;
+    case 'checkin': loadCheckinRooms(); resetCheckinFlow(); break;
+    case 'checkout': loadActiveStays(); break;
+    case 'payments': loadPayments(); break;
+    case 'reports': break; // manual load
+  }
 }
 
 // ===== Dashboard =====
 async function loadDashboard() {
-    try {
-        const [dashboard, rooms] = await Promise.all([
-            apiGet('/dashboard'),
-            apiGet('/rooms')
-        ]);
+  try {
+    const [dashboard, rooms] = await Promise.all([
+      apiGet('/dashboard'),
+      apiGet('/rooms')
+    ]);
 
-        const stats = dashboard.room_stats;
-        const available = (stats.find(s => s.status === 'AVAILABLE') || {}).count || 0;
-        const occupied = (stats.find(s => s.status === 'OCCUPIED') || {}).count || 0;
-        const cleaning = (stats.find(s => s.status === 'CLEANING') || {}).count || 0;
+    const stats = dashboard.room_stats;
+    const available = (stats.find(s => s.status === 'AVAILABLE') || {}).count || 0;
+    const occupied = (stats.find(s => s.status === 'OCCUPIED') || {}).count || 0;
+    const cleaning = (stats.find(s => s.status === 'CLEANING') || {}).count || 0;
 
-        document.getElementById('dashboard-stats').innerHTML = `
+    document.getElementById('dashboard-stats').innerHTML = `
       <div class="stat-card teal">
         <div class="stat-icon">🚪</div>
         <div class="stat-value">${rooms.length}</div>
@@ -184,15 +184,15 @@ async function loadDashboard() {
       </div>
     `;
 
-        renderRoomGrid('dashboard-rooms', rooms, false);
-    } catch (err) {
-        showToast('ไม่สามารถโหลดข้อมูลได้: ' + err.message, 'error');
-    }
+    renderRoomGrid('dashboard-rooms', rooms, false);
+  } catch (err) {
+    showToast('ไม่สามารถโหลดข้อมูลได้: ' + err.message, 'error');
+  }
 }
 
 function renderRoomGrid(containerId, rooms, clickable = true) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = rooms.map(r => `
+  const container = document.getElementById(containerId);
+  container.innerHTML = rooms.map(r => `
     <div class="room-card ${r.status.toLowerCase()}"
          data-room-id="${r.room_id}"
          ${clickable ? `onclick="onRoomClick(${r.room_id}, '${r.status}')"` : ''}>
@@ -206,41 +206,41 @@ function renderRoomGrid(containerId, rooms, clickable = true) {
 
 // ===== Rooms Page =====
 async function loadRooms() {
-    try {
-        const rooms = await apiGet('/rooms');
-        renderRoomGrid('rooms-grid', rooms, true);
-    } catch (err) {
-        showToast('โหลดข้อมูลห้องล้มเหลว', 'error');
-    }
+  try {
+    const rooms = await apiGet('/rooms');
+    renderRoomGrid('rooms-grid', rooms, true);
+  } catch (err) {
+    showToast('โหลดข้อมูลห้องล้มเหลว', 'error');
+  }
 }
 
 let editingRoomId = null;
 
 function onRoomClick(roomId, status) {
-    if (currentPage === 'rooms') {
-        editingRoomId = roomId;
-        document.getElementById('room-status-select').value = status;
-        document.getElementById('room-status-modal-title').textContent = `เปลี่ยนสถานะห้อง`;
-        openModal('room-status-modal');
-    }
+  if (currentPage === 'rooms') {
+    editingRoomId = roomId;
+    document.getElementById('room-status-select').value = status;
+    document.getElementById('room-status-modal-title').textContent = `เปลี่ยนสถานะห้อง`;
+    openModal('room-status-modal');
+  }
 }
 
 // ===== Guests Page =====
 async function loadGuests(searchTerm = '') {
-    try {
-        const url = searchTerm ? `/guests?search=${encodeURIComponent(searchTerm)}` : '/guests';
-        const guests = await apiGet(url);
-        const tbody = document.getElementById('guests-table-body');
-        const empty = document.getElementById('guests-empty');
+  try {
+    const url = searchTerm ? `/guests?search=${encodeURIComponent(searchTerm)}` : '/guests';
+    const guests = await apiGet(url);
+    const tbody = document.getElementById('guests-table-body');
+    const empty = document.getElementById('guests-empty');
 
-        if (guests.length === 0) {
-            tbody.innerHTML = '';
-            empty.style.display = searchTerm ? 'none' : 'block';
-            return;
-        }
-        empty.style.display = 'none';
+    if (guests.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = searchTerm ? 'none' : 'block';
+      return;
+    }
+    empty.style.display = 'none';
 
-        tbody.innerHTML = guests.map(g => `
+    tbody.innerHTML = guests.map(g => `
       <tr>
         <td><strong>${g.first_name} ${g.last_name}</strong></td>
         <td>${g.national_id}</td>
@@ -254,107 +254,107 @@ async function loadGuests(searchTerm = '') {
         </td>
       </tr>
     `).join('');
-    } catch (err) {
-        showToast('โหลดข้อมูลผู้เข้าพักล้มเหลว', 'error');
-    }
+  } catch (err) {
+    showToast('โหลดข้อมูลผู้เข้าพักล้มเหลว', 'error');
+  }
 }
 
 async function editGuest(id) {
-    try {
-        const guest = await apiGet(`/guests/${id}`);
-        document.getElementById('edit-guest-id').value = id;
-        document.getElementById('modal-first-name').value = guest.first_name;
-        document.getElementById('modal-last-name').value = guest.last_name;
-        document.getElementById('modal-national-id').value = guest.national_id;
-        document.getElementById('modal-phone').value = guest.phone || '';
-        document.getElementById('modal-address').value = guest.address || '';
-        document.getElementById('guest-modal-title').textContent = 'แก้ไขข้อมูลผู้เข้าพัก';
-        openModal('guest-modal');
-    } catch (err) {
-        showToast('ไม่พบข้อมูลผู้เข้าพัก', 'error');
-    }
+  try {
+    const guest = await apiGet(`/guests/${id}`);
+    document.getElementById('edit-guest-id').value = id;
+    document.getElementById('modal-first-name').value = guest.first_name;
+    document.getElementById('modal-last-name').value = guest.last_name;
+    document.getElementById('modal-national-id').value = guest.national_id;
+    document.getElementById('modal-phone').value = guest.phone || '';
+    document.getElementById('modal-address').value = guest.address || '';
+    document.getElementById('guest-modal-title').textContent = 'แก้ไขข้อมูลผู้เข้าพัก';
+    openModal('guest-modal');
+  } catch (err) {
+    showToast('ไม่พบข้อมูลผู้เข้าพัก', 'error');
+  }
 }
 
 async function deleteGuest(id) {
-    if (!confirm('คุณต้องการลบผู้เข้าพักนี้ใช่หรือไม่?')) return;
-    try {
-        await apiDelete(`/guests/${id}`);
-        showToast('ลบผู้เข้าพักสำเร็จ');
-        loadGuests();
-    } catch (err) {
-        showToast('ลบผู้เข้าพักล้มเหลว: ' + err.message, 'error');
-    }
+  if (!confirm('คุณต้องการลบผู้เข้าพักนี้ใช่หรือไม่?')) return;
+  try {
+    await apiDelete(`/guests/${id}`);
+    showToast('ลบผู้เข้าพักสำเร็จ');
+    loadGuests();
+  } catch (err) {
+    showToast('ลบผู้เข้าพักล้มเหลว: ' + err.message, 'error');
+  }
 }
 
 async function saveGuest() {
-    const id = document.getElementById('edit-guest-id').value;
-    const data = {
-        first_name: document.getElementById('modal-first-name').value.trim(),
-        last_name: document.getElementById('modal-last-name').value.trim(),
-        national_id: document.getElementById('modal-national-id').value.trim(),
-        phone: document.getElementById('modal-phone').value.trim(),
-        address: document.getElementById('modal-address').value.trim()
-    };
+  const id = document.getElementById('edit-guest-id').value;
+  const data = {
+    first_name: document.getElementById('modal-first-name').value.trim(),
+    last_name: document.getElementById('modal-last-name').value.trim(),
+    national_id: document.getElementById('modal-national-id').value.trim(),
+    phone: document.getElementById('modal-phone').value.trim(),
+    address: document.getElementById('modal-address').value.trim()
+  };
 
-    if (!data.first_name || !data.last_name || !data.national_id) {
-        showToast('กรุณากรอกชื่อ นามสกุล และเลขบัตรประชาชน', 'warning');
-        return;
-    }
+  if (!data.first_name || !data.last_name || !data.national_id) {
+    showToast('กรุณากรอกชื่อ นามสกุล และเลขบัตรประชาชน', 'warning');
+    return;
+  }
 
-    try {
-        if (id) {
-            await apiPut(`/guests/${id}`, data);
-            showToast('แก้ไขข้อมูลสำเร็จ');
-        } else {
-            await apiPost('/guests', data);
-            showToast('เพิ่มผู้เข้าพักสำเร็จ');
-        }
-        closeModal('guest-modal');
-        loadGuests();
-    } catch (err) {
-        showToast('บันทึกล้มเหลว: ' + err.message, 'error');
+  try {
+    if (id) {
+      await apiPut(`/guests/${id}`, data);
+      showToast('แก้ไขข้อมูลสำเร็จ');
+    } else {
+      await apiPost('/guests', data);
+      showToast('เพิ่มผู้เข้าพักสำเร็จ');
     }
+    closeModal('guest-modal');
+    loadGuests();
+  } catch (err) {
+    showToast('บันทึกล้มเหลว: ' + err.message, 'error');
+  }
 }
 
 // ===== Check-in Flow =====
 let checkinData = { room: null, guest: null };
 
 function resetCheckinFlow() {
-    checkinData = { room: null, guest: null };
-    selectedGuestId = null;
-    document.getElementById('checkin-phase1').style.display = 'block';
-    document.getElementById('checkin-phase2').style.display = 'none';
-    document.getElementById('checkin-phase3').style.display = 'none';
-    document.getElementById('checkin-guest-found').style.display = 'none';
-    setCheckinStep(1);
-    clearCheckinForm();
+  checkinData = { room: null, guest: null };
+  selectedGuestId = null;
+  document.getElementById('checkin-phase1').style.display = 'block';
+  document.getElementById('checkin-phase2').style.display = 'none';
+  document.getElementById('checkin-phase3').style.display = 'none';
+  document.getElementById('checkin-guest-found').style.display = 'none';
+  setCheckinStep(1);
+  clearCheckinForm();
 }
 
 function setCheckinStep(step) {
-    for (let i = 1; i <= 3; i++) {
-        const el = document.getElementById(`checkin-step${i}`);
-        el.classList.remove('active', 'done');
-        if (i < step) el.classList.add('done');
-        if (i === step) el.classList.add('active');
-    }
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById(`checkin-step${i}`);
+    el.classList.remove('active', 'done');
+    if (i < step) el.classList.add('done');
+    if (i === step) el.classList.add('active');
+  }
 }
 
 function clearCheckinForm() {
-    ['ci-first-name', 'ci-last-name', 'ci-national-id', 'ci-phone', 'ci-address'].forEach(id => {
-        document.getElementById(id).value = '';
-    });
-    document.getElementById('checkin-search-nid').value = '';
+  ['ci-first-name', 'ci-last-name', 'ci-national-id', 'ci-phone', 'ci-address'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('checkin-search-nid').value = '';
 }
 
 async function loadCheckinRooms() {
-    try {
-        const rooms = await apiGet('/rooms?status=AVAILABLE');
-        const container = document.getElementById('checkin-rooms');
-        if (rooms.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏠</div><p>ไม่มีห้องว่าง</p></div>';
-            return;
-        }
-        container.innerHTML = rooms.map(r => `
+  try {
+    const rooms = await apiGet('/rooms?status=AVAILABLE');
+    const container = document.getElementById('checkin-rooms');
+    if (rooms.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏠</div><p>ไม่มีห้องว่าง</p></div>';
+      return;
+    }
+    container.innerHTML = rooms.map(r => `
       <div class="room-card available" style="cursor:pointer;"
            onclick="selectCheckinRoom(${JSON.stringify(r).replace(/"/g, '&quot;')})">
         <div class="room-number">${r.room_number}</div>
@@ -363,36 +363,36 @@ async function loadCheckinRooms() {
         <div class="room-status-badge">เลือกห้องนี้</div>
       </div>
     `).join('');
-    } catch (err) {
-        showToast('โหลดห้องว่างล้มเหลว', 'error');
-    }
+  } catch (err) {
+    showToast('โหลดห้องว่างล้มเหลว', 'error');
+  }
 }
 
 function selectCheckinRoom(room) {
-    checkinData.room = room;
-    document.getElementById('checkin-phase1').style.display = 'none';
-    document.getElementById('checkin-phase2').style.display = 'block';
-    setCheckinStep(2);
+  checkinData.room = room;
+  document.getElementById('checkin-phase1').style.display = 'none';
+  document.getElementById('checkin-phase2').style.display = 'block';
+  setCheckinStep(2);
 }
 
 async function searchGuestForCheckin() {
-    const nid = document.getElementById('checkin-search-nid').value.trim();
-    if (!nid) {
-        showToast('กรุณากรอกเลขบัตรประชาชน', 'warning');
-        return;
-    }
-    try {
-        const guests = await apiGet(`/guests?national_id=${nid}`);
-        const container = document.getElementById('checkin-guest-found');
-        if (guests.length > 0) {
-            const g = guests[0];
-            selectedGuestId = g.guest_id;
-            document.getElementById('ci-first-name').value = g.first_name;
-            document.getElementById('ci-last-name').value = g.last_name;
-            document.getElementById('ci-national-id').value = g.national_id;
-            document.getElementById('ci-phone').value = g.phone || '';
-            document.getElementById('ci-address').value = g.address || '';
-            container.innerHTML = `
+  const nid = document.getElementById('checkin-search-nid').value.trim();
+  if (!nid) {
+    showToast('กรุณากรอกเลขบัตรประชาชน', 'warning');
+    return;
+  }
+  try {
+    const guests = await apiGet(`/guests?national_id=${nid}`);
+    const container = document.getElementById('checkin-guest-found');
+    if (guests.length > 0) {
+      const g = guests[0];
+      selectedGuestId = g.guest_id;
+      document.getElementById('ci-first-name').value = g.first_name;
+      document.getElementById('ci-last-name').value = g.last_name;
+      document.getElementById('ci-national-id').value = g.national_id;
+      document.getElementById('ci-phone').value = g.phone || '';
+      document.getElementById('ci-address').value = g.address || '';
+      container.innerHTML = `
         <div class="guest-search-result">
           <div class="guest-info-text">
             <h4>🔄 พบผู้เข้าพักเก่า: ${g.first_name} ${g.last_name}</h4>
@@ -401,10 +401,10 @@ async function searchGuestForCheckin() {
           <span class="badge badge-info">ผู้เข้าพักซ้ำ</span>
         </div>
       `;
-            container.style.display = 'block';
-            showToast('พบข้อมูลผู้เข้าพักเก่า กรอกข้อมูลให้อัตโนมัติแล้ว', 'info');
-        } else {
-            container.innerHTML = `
+      container.style.display = 'block';
+      showToast('พบข้อมูลผู้เข้าพักเก่า กรอกข้อมูลให้อัตโนมัติแล้ว', 'info');
+    } else {
+      container.innerHTML = `
         <div class="guest-search-result" style="background:#FEF3C7; border-color:#FCD34D;">
           <div class="guest-info-text">
             <h4>ไม่พบข้อมูลผู้เข้าพักเก่า</h4>
@@ -412,37 +412,37 @@ async function searchGuestForCheckin() {
           </div>
         </div>
       `;
-            container.style.display = 'block';
-            selectedGuestId = null;
-        }
-    } catch (err) {
-        showToast('ค้นหาล้มเหลว: ' + err.message, 'error');
+      container.style.display = 'block';
+      selectedGuestId = null;
     }
+  } catch (err) {
+    showToast('ค้นหาล้มเหลว: ' + err.message, 'error');
+  }
 }
 
 function proceedToConfirm() {
-    const firstName = document.getElementById('ci-first-name').value.trim();
-    const lastName = document.getElementById('ci-last-name').value.trim();
-    const nationalId = document.getElementById('ci-national-id').value.trim();
-    const phone = document.getElementById('ci-phone').value.trim();
-    const address = document.getElementById('ci-address').value.trim();
-    const method = document.getElementById('ci-payment-method').value;
+  const firstName = document.getElementById('ci-first-name').value.trim();
+  const lastName = document.getElementById('ci-last-name').value.trim();
+  const nationalId = document.getElementById('ci-national-id').value.trim();
+  const phone = document.getElementById('ci-phone').value.trim();
+  const address = document.getElementById('ci-address').value.trim();
+  const method = document.getElementById('ci-payment-method').value;
 
-    if (!firstName || !lastName || !nationalId) {
-        showToast('กรุณากรอกชื่อ นามสกุล และเลขบัตรประชาชน', 'warning');
-        return;
-    }
+  if (!firstName || !lastName || !nationalId) {
+    showToast('กรุณากรอกชื่อ นามสกุล และเลขบัตรประชาชน', 'warning');
+    return;
+  }
 
-    checkinData.guest = { firstName, lastName, nationalId, phone, address, method };
+  checkinData.guest = { firstName, lastName, nationalId, phone, address, method };
 
-    document.getElementById('checkin-phase2').style.display = 'none';
-    document.getElementById('checkin-phase3').style.display = 'block';
-    setCheckinStep(3);
+  document.getElementById('checkin-phase2').style.display = 'none';
+  document.getElementById('checkin-phase3').style.display = 'block';
+  setCheckinStep(3);
 
-    const room = checkinData.room;
-    const total = parseFloat(room.price_per_day) + 100;
+  const room = checkinData.room;
+  const total = parseFloat(room.price_per_day) + 100;
 
-    document.getElementById('checkin-summary').innerHTML = `
+  document.getElementById('checkin-summary').innerHTML = `
     <div class="summary-box">
       <h4>📋 สรุปการเช็คอิน</h4>
       <div class="summary-row">
@@ -482,60 +482,60 @@ function proceedToConfirm() {
 }
 
 async function confirmCheckin() {
-    const { room, guest } = checkinData;
-    try {
-        // If no existing guest, create one first
-        let guestId = selectedGuestId;
-        if (!guestId) {
-            const newGuest = await apiPost('/guests', {
-                first_name: guest.firstName,
-                last_name: guest.lastName,
-                national_id: guest.nationalId,
-                phone: guest.phone,
-                address: guest.address
-            });
-            guestId = newGuest.guest_id;
+  const { room, guest } = checkinData;
+  try {
+    // If no existing guest, create one first
+    let guestId = selectedGuestId;
+    if (!guestId) {
+      const newGuest = await apiPost('/guests', {
+        first_name: guest.firstName,
+        last_name: guest.lastName,
+        national_id: guest.nationalId,
+        phone: guest.phone,
+        address: guest.address
+      });
+      guestId = newGuest.guest_id;
 
-            if (newGuest.returning_customer) {
-                showToast('พบผู้เข้าพักเก่า ใช้ข้อมูลเดิม', 'info');
-            }
-        }
-
-        const result = await apiPost('/checkin', {
-            guest_id: guestId,
-            room_id: room.room_id,
-            payment_method: guest.method
-        });
-
-        showToast(`เช็คอินสำเร็จ! ห้อง ${room.room_number}`, 'success');
-        resetCheckinFlow();
-        loadCheckinRooms();
-    } catch (err) {
-        showToast('เช็คอินล้มเหลว: ' + err.message, 'error');
+      if (newGuest.returning_customer) {
+        showToast('พบผู้เข้าพักเก่า ใช้ข้อมูลเดิม', 'info');
+      }
     }
+
+    const result = await apiPost('/checkin', {
+      guest_id: guestId,
+      room_id: room.room_id,
+      payment_method: guest.method
+    });
+
+    showToast(`เช็คอินสำเร็จ! ห้อง ${room.room_number}`, 'success');
+    resetCheckinFlow();
+    loadCheckinRooms();
+  } catch (err) {
+    showToast('เช็คอินล้มเหลว: ' + err.message, 'error');
+  }
 }
 
 // ===== Check-out =====
 async function loadActiveStays() {
-    try {
-        const stays = await apiGet('/stays/active');
-        const container = document.getElementById('checkout-list');
-        const empty = document.getElementById('checkout-empty');
+  try {
+    const stays = await apiGet('/stays/active');
+    const container = document.getElementById('checkout-list');
+    const empty = document.getElementById('checkout-empty');
 
-        if (stays.length === 0) {
-            container.innerHTML = '';
-            empty.style.display = 'block';
-            return;
-        }
-        empty.style.display = 'none';
+    if (stays.length === 0) {
+      container.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
 
-        container.innerHTML = stays.map(s => {
-            const checkIn = new Date(s.check_in);
-            const now = new Date();
-            const diffHours = Math.floor((now - checkIn) / (1000 * 60 * 60));
-            const isLate = diffHours > 24;
+    container.innerHTML = stays.map(s => {
+      const checkIn = new Date(s.check_in);
+      const now = new Date();
+      const diffHours = Math.floor((now - checkIn) / (1000 * 60 * 60));
+      const isLate = diffHours > 24;
 
-            return `
+      return `
         <div class="checkout-card">
           <div class="checkout-header">
             <div>
@@ -573,33 +573,33 @@ async function loadActiveStays() {
           </div>
         </div>
       `;
-        }).join('');
-    } catch (err) {
-        showToast('โหลดข้อมูลผู้เข้าพักล้มเหลว', 'error');
-    }
+    }).join('');
+  } catch (err) {
+    showToast('โหลดข้อมูลผู้เข้าพักล้มเหลว', 'error');
+  }
 }
 
 function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay) {
-    checkoutStayId = stayId;
-    const checkInDate = new Date(checkIn);
-    const now = new Date();
+  checkoutStayId = stayId;
+  const checkInDate = new Date(checkIn);
+  const now = new Date();
 
-    // Calculate late fees
-    const checkInDay = new Date(checkInDate);
-    checkInDay.setHours(0, 0, 0, 0);
-    const expectedCheckout = new Date(checkInDay);
-    expectedCheckout.setDate(expectedCheckout.getDate() + 1);
-    expectedCheckout.setHours(12, 0, 0, 0);
+  // Calculate late fees
+  const checkInDay = new Date(checkInDate);
+  checkInDay.setHours(0, 0, 0, 0);
+  const expectedCheckout = new Date(checkInDay);
+  expectedCheckout.setDate(expectedCheckout.getDate() + 1);
+  expectedCheckout.setHours(12, 0, 0, 0);
 
-    let lateFee = 0;
-    let extraDays = 0;
-    if (now > expectedCheckout) {
-        const diffMs = now - expectedCheckout;
-        extraDays = Math.ceil(diffMs / (24 * 60 * 60 * 1000));
-        lateFee = extraDays * pricePerDay;
-    }
+  let lateFee = 0;
+  let extraDays = 0;
+  if (now > expectedCheckout) {
+    const diffMs = now - expectedCheckout;
+    extraDays = Math.ceil(diffMs / (24 * 60 * 60 * 1000));
+    lateFee = extraDays * pricePerDay;
+  }
 
-    document.getElementById('checkout-modal-body').innerHTML = `
+  document.getElementById('checkout-modal-body').innerHTML = `
     <div class="summary-box">
       <h4>📋 สรุปการเช็คเอาท์</h4>
       <div class="summary-row">
@@ -640,50 +640,50 @@ function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay) 
       </select>
     </div>
   `;
-    openModal('checkout-modal');
+  openModal('checkout-modal');
 }
 
 async function confirmCheckout() {
-    if (!checkoutStayId) return;
-    const keyReturned = document.getElementById('checkout-key-returned').checked;
-    const method = document.getElementById('checkout-method').value;
+  if (!checkoutStayId) return;
+  const keyReturned = document.getElementById('checkout-key-returned').checked;
+  const method = document.getElementById('checkout-method').value;
 
-    try {
-        const result = await apiPost(`/checkout/${checkoutStayId}`, {
-            key_returned: keyReturned,
-            payment_method: method
-        });
+  try {
+    const result = await apiPost(`/checkout/${checkoutStayId}`, {
+      key_returned: keyReturned,
+      payment_method: method
+    });
 
-        let msg = `เช็คเอาท์ห้อง ${result.room_number} สำเร็จ`;
-        if (result.late_fee > 0) {
-            msg += ` | ค่าปรับ: ฿${formatMoney(result.late_fee)}`;
-        }
-        if (result.deposit_returned) {
-            msg += ' | คืนมัดจำแล้ว';
-        }
-        showToast(msg, 'success');
-        closeModal('checkout-modal');
-        loadActiveStays();
-    } catch (err) {
-        showToast('เช็คเอาท์ล้มเหลว: ' + err.message, 'error');
+    let msg = `เช็คเอาท์ห้อง ${result.room_number} สำเร็จ`;
+    if (result.late_fee > 0) {
+      msg += ` | ค่าปรับ: ฿${formatMoney(result.late_fee)}`;
     }
+    if (result.deposit_returned) {
+      msg += ' | คืนมัดจำแล้ว';
+    }
+    showToast(msg, 'success');
+    closeModal('checkout-modal');
+    loadActiveStays();
+  } catch (err) {
+    showToast('เช็คเอาท์ล้มเหลว: ' + err.message, 'error');
+  }
 }
 
 // ===== Payments =====
 async function loadPayments() {
-    try {
-        const payments = await apiGet('/payments');
-        const tbody = document.getElementById('payments-table-body');
+  try {
+    const payments = await apiGet('/payments');
+    const tbody = document.getElementById('payments-table-body');
 
-        tbody.innerHTML = payments.map(p => `
+    tbody.innerHTML = payments.map(p => `
       <tr>
         <td>${formatDateTime(p.payment_date)}</td>
         <td>${p.room_number}</td>
         <td>${p.first_name} ${p.last_name}</td>
         <td>
           <span class="badge ${p.payment_type === 'DEPOSIT_RETURN' ? 'badge-warning' :
-                p.payment_type === 'LATE_FEE' ? 'badge-danger' :
-                    p.payment_type === 'DEPOSIT' ? 'badge-info' : 'badge-success'}">
+        p.payment_type === 'LATE_FEE' ? 'badge-danger' :
+          p.payment_type === 'DEPOSIT' ? 'badge-info' : 'badge-success'}">
             ${paymentTypeLabel(p.payment_type)}
           </span>
         </td>
@@ -693,23 +693,23 @@ async function loadPayments() {
         </td>
       </tr>
     `).join('');
-    } catch (err) {
-        showToast('โหลดข้อมูลการชำระเงินล้มเหลว', 'error');
-    }
+  } catch (err) {
+    showToast('โหลดข้อมูลการชำระเงินล้มเหลว', 'error');
+  }
 }
 
 // ===== Reports =====
 async function loadReport() {
-    const month = document.getElementById('report-month').value;
-    const year = document.getElementById('report-year').value;
-    try {
-        const report = await apiGet(`/reports/monthly?year=${year}&month=${month}`);
-        const s = report.summary;
+  const month = document.getElementById('report-month').value;
+  const year = document.getElementById('report-year').value;
+  try {
+    const report = await apiGet(`/reports/monthly?year=${year}&month=${month}`);
+    const s = report.summary;
 
-        const thMonths = ['', 'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
-            'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+    const thMonths = ['', 'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
-        document.getElementById('report-content').innerHTML = `
+    document.getElementById('report-content').innerHTML = `
       <div class="section-title">📊 รายงานเดือน${thMonths[report.month]} ${report.year}</div>
 
       <div class="stats-grid">
@@ -793,115 +793,146 @@ async function loadReport() {
         </div>
       ` : ''}
     `;
-    } catch (err) {
-        showToast('โหลดรายงานล้มเหลว: ' + err.message, 'error');
-    }
+  } catch (err) {
+    showToast('โหลดรายงานล้มเหลว: ' + err.message, 'error');
+  }
 }
 
 // ===== Room Status Update =====
 async function saveRoomStatus() {
-    if (!editingRoomId) return;
-    const status = document.getElementById('room-status-select').value;
-    try {
-        await apiPut(`/rooms/${editingRoomId}/status`, { status });
-        showToast(`เปลี่ยนสถานะห้องเป็น ${statusLabel(status)} สำเร็จ`);
-        closeModal('room-status-modal');
-        loadRooms();
-    } catch (err) {
-        showToast('เปลี่ยนสถานะล้มเหลว: ' + err.message, 'error');
-    }
+  if (!editingRoomId) return;
+  const status = document.getElementById('room-status-select').value;
+  try {
+    await apiPut(`/rooms/${editingRoomId}/status`, { status });
+    showToast(`เปลี่ยนสถานะห้องเป็น ${statusLabel(status)} สำเร็จ`);
+    closeModal('room-status-modal');
+    loadRooms();
+  } catch (err) {
+    showToast('เปลี่ยนสถานะล้มเหลว: ' + err.message, 'error');
+  }
 }
 
 // ===== Modal Helpers =====
 function openModal(id) {
-    document.getElementById(id).classList.add('active');
+  document.getElementById(id).classList.add('active');
 }
 
 function closeModal(id) {
-    document.getElementById(id).classList.remove('active');
+  document.getElementById(id).classList.remove('active');
 }
 
 // ===== Clock =====
 function updateClock() {
-    const now = new Date();
-    document.getElementById('current-time').textContent =
-        now.toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) +
-        ' ' + now.toLocaleTimeString('th-TH');
+  const now = new Date();
+  document.getElementById('current-time').textContent =
+    now.toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) +
+    ' ' + now.toLocaleTimeString('th-TH');
+}
+
+// ===== Sidebar Toggle (Mobile) =====
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const isOpen = sidebar.classList.toggle('open');
+  if (isOpen) {
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  } else {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
 }
 
 // ===== Event Listeners =====
 document.addEventListener('DOMContentLoaded', () => {
-    // Navigation
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', () => navigateTo(item.dataset.page));
+  // Hamburger menu toggle
+  document.getElementById('hamburger-btn').addEventListener('click', toggleSidebar);
+  document.getElementById('sidebar-overlay').addEventListener('click', closeSidebar);
+
+  // Navigation (close sidebar on mobile after navigating)
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      navigateTo(item.dataset.page);
+      if (window.innerWidth <= 768) {
+        closeSidebar();
+      }
     });
+  });
 
-    // Guest search
-    let searchTimeout;
-    document.getElementById('guest-search').addEventListener('input', (e) => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => loadGuests(e.target.value.trim()), 300);
+  // Guest search
+  let searchTimeout;
+  document.getElementById('guest-search').addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => loadGuests(e.target.value.trim()), 300);
+  });
+
+  // Add guest button
+  document.getElementById('btn-add-guest').addEventListener('click', () => {
+    document.getElementById('edit-guest-id').value = '';
+    document.getElementById('modal-first-name').value = '';
+    document.getElementById('modal-last-name').value = '';
+    document.getElementById('modal-national-id').value = '';
+    document.getElementById('modal-phone').value = '';
+    document.getElementById('modal-address').value = '';
+    document.getElementById('guest-modal-title').textContent = 'เพิ่มผู้เข้าพัก';
+    openModal('guest-modal');
+  });
+
+  // Guest modal
+  document.getElementById('guest-modal-save').addEventListener('click', saveGuest);
+  document.getElementById('guest-modal-close').addEventListener('click', () => closeModal('guest-modal'));
+  document.getElementById('guest-modal-cancel').addEventListener('click', () => closeModal('guest-modal'));
+
+  // Check-in flow
+  document.getElementById('btn-search-guest').addEventListener('click', searchGuestForCheckin);
+  document.getElementById('btn-checkin-next').addEventListener('click', proceedToConfirm);
+  document.getElementById('btn-confirm-checkin').addEventListener('click', confirmCheckin);
+  document.getElementById('checkin-back1').addEventListener('click', () => {
+    document.getElementById('checkin-phase2').style.display = 'none';
+    document.getElementById('checkin-phase1').style.display = 'block';
+    setCheckinStep(1);
+  });
+  document.getElementById('checkin-back2').addEventListener('click', () => {
+    document.getElementById('checkin-phase3').style.display = 'none';
+    document.getElementById('checkin-phase2').style.display = 'block';
+    setCheckinStep(2);
+  });
+
+  // Checkout modal
+  document.getElementById('checkout-modal-confirm').addEventListener('click', confirmCheckout);
+  document.getElementById('checkout-modal-close').addEventListener('click', () => closeModal('checkout-modal'));
+  document.getElementById('checkout-modal-cancel').addEventListener('click', () => closeModal('checkout-modal'));
+
+  // Room status modal
+  document.getElementById('room-status-save').addEventListener('click', saveRoomStatus);
+  document.getElementById('room-status-modal-close').addEventListener('click', () => closeModal('room-status-modal'));
+  document.getElementById('room-status-cancel').addEventListener('click', () => closeModal('room-status-modal'));
+
+  // Report
+  document.getElementById('btn-load-report').addEventListener('click', loadReport);
+  const now = new Date();
+  document.getElementById('report-month').value = now.getMonth() + 1;
+  document.getElementById('report-year').value = now.getFullYear();
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('active');
     });
+  });
 
-    // Add guest button
-    document.getElementById('btn-add-guest').addEventListener('click', () => {
-        document.getElementById('edit-guest-id').value = '';
-        document.getElementById('modal-first-name').value = '';
-        document.getElementById('modal-last-name').value = '';
-        document.getElementById('modal-national-id').value = '';
-        document.getElementById('modal-phone').value = '';
-        document.getElementById('modal-address').value = '';
-        document.getElementById('guest-modal-title').textContent = 'เพิ่มผู้เข้าพัก';
-        openModal('guest-modal');
-    });
+  // Clock
+  updateClock();
+  setInterval(updateClock, 1000);
 
-    // Guest modal
-    document.getElementById('guest-modal-save').addEventListener('click', saveGuest);
-    document.getElementById('guest-modal-close').addEventListener('click', () => closeModal('guest-modal'));
-    document.getElementById('guest-modal-cancel').addEventListener('click', () => closeModal('guest-modal'));
-
-    // Check-in flow
-    document.getElementById('btn-search-guest').addEventListener('click', searchGuestForCheckin);
-    document.getElementById('btn-checkin-next').addEventListener('click', proceedToConfirm);
-    document.getElementById('btn-confirm-checkin').addEventListener('click', confirmCheckin);
-    document.getElementById('checkin-back1').addEventListener('click', () => {
-        document.getElementById('checkin-phase2').style.display = 'none';
-        document.getElementById('checkin-phase1').style.display = 'block';
-        setCheckinStep(1);
-    });
-    document.getElementById('checkin-back2').addEventListener('click', () => {
-        document.getElementById('checkin-phase3').style.display = 'none';
-        document.getElementById('checkin-phase2').style.display = 'block';
-        setCheckinStep(2);
-    });
-
-    // Checkout modal
-    document.getElementById('checkout-modal-confirm').addEventListener('click', confirmCheckout);
-    document.getElementById('checkout-modal-close').addEventListener('click', () => closeModal('checkout-modal'));
-    document.getElementById('checkout-modal-cancel').addEventListener('click', () => closeModal('checkout-modal'));
-
-    // Room status modal
-    document.getElementById('room-status-save').addEventListener('click', saveRoomStatus);
-    document.getElementById('room-status-modal-close').addEventListener('click', () => closeModal('room-status-modal'));
-    document.getElementById('room-status-cancel').addEventListener('click', () => closeModal('room-status-modal'));
-
-    // Report
-    document.getElementById('btn-load-report').addEventListener('click', loadReport);
-    const now = new Date();
-    document.getElementById('report-month').value = now.getMonth() + 1;
-    document.getElementById('report-year').value = now.getFullYear();
-
-    // Close modals on overlay click
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) overlay.classList.remove('active');
-        });
-    });
-
-    // Clock
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    // Initial load
-    loadDashboard();
+  // Initial load
+  loadDashboard();
 });

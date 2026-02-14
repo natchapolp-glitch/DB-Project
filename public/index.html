@@ -49,13 +49,18 @@
         </button>
       </nav>
     </aside>
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <!-- ===== Main Content ===== -->
     <main class="main-content">
       <header class="page-header">
-        <div>
-          <h2 id="page-title">แดชบอร์ด</h2>
-          <div class="header-subtitle" id="page-subtitle">ภาพรวมระบบจัดการแมนชั่น</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <button class="hamburger-btn" id="hamburger-btn" aria-label="เปิดเมนู">☰</button>
+          <div>
+            <h2 id="page-title">แดชบอร์ด</h2>
+            <div class="header-subtitle" id="page-subtitle">ภาพรวมระบบจัดการแมนชั่น</div>
+          </div>
         </div>
         <div style="display:flex; gap:12px; align-items:center;">
           <span style="font-size:0.85rem; color:var(--text-muted);" id="current-time"></span>
