@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mansion POS - ระบบจัดการแมนชั่นรายวัน</title>
+  <meta name="description" content="ระบบจัดการแมนชั่นรายวัน สำหรับบริหารจัดการห้องพัก ผู้เข้าพัก และการชำระเงิน">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app-layout">
+    <!-- ===== Sidebar ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">🏨</div>
+        <div>
+          <h1>Mansion POS</h1>
+          <p>ระบบจัดการแมนชั่น</p>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">เมนูหลัก</div>
+        <button class="nav-item active" data-page="dashboard" id="nav-dashboard">
+          <span class="nav-icon">📊</span> แดชบอร์ด
+        </button>
+        <button class="nav-item" data-page="rooms" id="nav-rooms">
+          <span class="nav-icon">🚪</span> จัดการห้องพัก
+        </button>
+        <button class="nav-item" data-page="guests" id="nav-guests">
+          <span class="nav-icon">👤</span> จัดการผู้เข้าพัก
+        </button>
+
+        <div class="nav-section-title">การดำเนินงาน</div>
+        <button class="nav-item" data-page="checkin" id="nav-checkin">
+          <span class="nav-icon">📥</span> เช็คอิน
+        </button>
+        <button class="nav-item" data-page="checkout" id="nav-checkout">
+          <span class="nav-icon">📤</span> เช็คเอาท์
+        </button>
+
+        <div class="nav-section-title">การเงิน & รายงาน</div>
+        <button class="nav-item" data-page="payments" id="nav-payments">
+          <span class="nav-icon">💰</span> การชำระเงิน
+        </button>
+        <button class="nav-item" data-page="reports" id="nav-reports">
+          <span class="nav-icon">📈</span> รายงานรายเดือน
+        </button>
+      </nav>
+    </aside>
+
+    <!-- ===== Main Content ===== -->
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <h2 id="page-title">แดชบอร์ด</h2>
+          <div class="header-subtitle" id="page-subtitle">ภาพรวมระบบจัดการแมนชั่น</div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <span style="font-size:0.85rem; color:var(--text-muted);" id="current-time"></span>
+        </div>
+      </header>
+
+      <div class="page-body">
+
+        <!-- ===== Dashboard Page ===== -->
+        <section class="page-section active" id="page-dashboard">
+          <div class="stats-grid" id="dashboard-stats"></div>
+          <div class="section-title">🚪 สถานะห้องพักทั้งหมด</div>
+          <div class="room-legend">
+            <div class="legend-item">
+              <div class="legend-dot available"></div> ว่าง (Available)
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot occupied"></div> มีผู้เข้าพัก (Occupied)
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot cleaning"></div> ทำความสะอาด (Cleaning)
+            </div>
+          </div>
+          <div class="room-grid" id="dashboard-rooms"></div>
+        </section>
+
+        <!-- ===== Rooms Page ===== -->
+        <section class="page-section" id="page-rooms">
+          <div class="room-legend">
+            <div class="legend-item">
+              <div class="legend-dot available"></div> ว่าง
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot occupied"></div> มีผู้เข้าพัก
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot cleaning"></div> ทำความสะอาด
+            </div>
+          </div>
+          <div class="room-grid" id="rooms-grid"></div>
+        </section>
+
+        <!-- ===== Guests Page ===== -->
+        <section class="page-section" id="page-guests">
+          <div class="toolbar">
+            <div class="search-bar" style="margin-bottom:0;">
+              <div class="search-input-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="form-input" id="guest-search" placeholder="ค้นหาชื่อ, เลขบัตร, เบอร์โทร..."
+                  style="padding-left:40px;">
+              </div>
+            </div>
+            <button class="btn btn-primary" id="btn-add-guest">➕ เพิ่มผู้เข้าพัก</button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ชื่อ-นามสกุล</th>
+                  <th>เลขบัตรประชาชน</th>
+                  <th>เบอร์โทรศัพท์</th>
+                  <th>ที่อยู่</th>
+                  <th>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="guests-table-body"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="guests-empty" style="display:none;">
+            <div class="empty-icon">👤</div>
+            <p>ยังไม่มีข้อมูลผู้เข้าพัก</p>
+          </div>
+        </section>
+
+        <!-- ===== Check-in Page ===== -->
+        <section class="page-section" id="page-checkin">
+          <div class="flow-steps">
+            <div class="flow-step active" id="checkin-step1">
+              <div class="step-num">1</div> เลือกห้อง
+            </div>
+            <div class="flow-connector"></div>
+            <div class="flow-step" id="checkin-step2">
+              <div class="step-num">2</div> ข้อมูลผู้เข้าพัก
+            </div>
+            <div class="flow-connector"></div>
+            <div class="flow-step" id="checkin-step3">
+              <div class="step-num">3</div> ยืนยัน
+            </div>
+          </div>
+
+          <!-- Step 1: Select Room -->
+          <div id="checkin-phase1">
+            <div class="section-title">เลือกห้องว่าง</div>
+            <div class="room-grid" id="checkin-rooms"></div>
+          </div>
+
+          <!-- Step 2: Guest Info -->
+          <div id="checkin-phase2" style="display:none;">
+            <div style="display:flex; gap:12px; margin-bottom:16px;">
+              <button class="btn btn-secondary" id="checkin-back1">← ย้อนกลับ</button>
+            </div>
+            <div style="max-width:600px;">
+              <div class="section-title">🔍 ค้นหาผู้เข้าพักเก่า (เลขบัตรประชาชน)</div>
+              <div style="display:flex; gap:12px; margin-bottom:16px;">
+                <input type="text" class="form-input" id="checkin-search-nid" placeholder="กรอกเลขบัตร 13 หลัก"
+                  maxlength="13" style="flex:1;">
+                <button class="btn btn-secondary" id="btn-search-guest">ค้นหา</button>
+              </div>
+              <div id="checkin-guest-found" style="display:none;"></div>
+
+              <div class="section-title">📋 ข้อมูลผู้เข้าพัก</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">ชื่อ *</label>
+                  <input type="text" class="form-input" id="ci-first-name">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">นามสกุล *</label>
+                  <input type="text" class="form-input" id="ci-last-name">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">เลขบัตรประชาชน *</label>
+                  <input type="text" class="form-input" id="ci-national-id" maxlength="13">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">เบอร์โทรศัพท์</label>
+                  <input type="text" class="form-input" id="ci-phone" maxlength="10">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">ที่อยู่</label>
+                <textarea class="form-textarea" id="ci-address"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">วิธีชำระเงิน</label>
+                <select class="form-select" id="ci-payment-method">
+                  <option value="CASH">เงินสด</option>
+                  <option value="TRANSFER">โอนเงิน</option>
+                  <option value="CREDIT_CARD">บัตรเครดิต</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" id="btn-checkin-next" style="margin-top:8px;">ถัดไป →</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Confirm -->
+          <div id="checkin-phase3" style="display:none;">
+            <div style="display:flex; gap:12px; margin-bottom:16px;">
+              <button class="btn btn-secondary" id="checkin-back2">← ย้อนกลับ</button>
+            </div>
+            <div style="max-width:500px;">
+              <div class="section-title">✅ ยืนยันการเช็คอิน</div>
+              <div id="checkin-summary"></div>
+              <button class="btn btn-success" id="btn-confirm-checkin" style="margin-top:16px; width:100%;">
+                ✅ ยืนยันเช็คอิน
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== Check-out Page ===== -->
+        <section class="page-section" id="page-checkout">
+          <div class="section-title">📤 ผู้เข้าพักที่เช็คอินอยู่</div>
+          <div id="checkout-list"></div>
+          <div class="empty-state" id="checkout-empty" style="display:none;">
+            <div class="empty-icon">🏠</div>
+            <p>ไม่มีผู้เข้าพักที่เช็คอินอยู่ในขณะนี้</p>
+          </div>
+        </section>
+
+        <!-- ===== Payments Page ===== -->
+        <section class="page-section" id="page-payments">
+          <div class="section-title">💰 ประวัติการชำระเงิน</div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>วันที่</th>
+                  <th>ห้อง</th>
+                  <th>ผู้เข้าพัก</th>
+                  <th>ประเภท</th>
+                  <th>วิธี</th>
+                  <th>จำนวนเงิน</th>
+                </tr>
+              </thead>
+              <tbody id="payments-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===== Reports Page ===== -->
+        <section class="page-section" id="page-reports">
+          <div class="month-picker">
+            <label class="form-label" style="margin-bottom:0;">เดือน:</label>
+            <select class="form-select" id="report-month" style="width:auto;">
+              <option value="1">มกราคม</option>
+              <option value="2">กุมภาพันธ์</option>
+              <option value="3">มีนาคม</option>
+              <option value="4">เมษายน</option>
+              <option value="5">พฤษภาคม</option>
+              <option value="6">มิถุนายน</option>
+              <option value="7">กรกฎาคม</option>
+              <option value="8">สิงหาคม</option>
+              <option value="9">กันยายน</option>
+              <option value="10">ตุลาคม</option>
+              <option value="11">พฤศจิกายน</option>
+              <option value="12">ธันวาคม</option>
+            </select>
+            <label class="form-label" style="margin-bottom:0;">ปี:</label>
+            <input type="number" class="form-input" id="report-year" style="width:100px;" value="2026">
+            <button class="btn btn-primary" id="btn-load-report">📊 ดูรายงาน</button>
+          </div>
+          <div id="report-content"></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== Guest Modal ===== -->
+  <div class="modal-overlay" id="guest-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="guest-modal-title">เพิ่มผู้เข้าพัก</h3>
+        <button class="modal-close" id="guest-modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-guest-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ชื่อ *</label>
+            <input type="text" class="form-input" id="modal-first-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">นามสกุล *</label>
+            <input type="text" class="form-input" id="modal-last-name">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">เลขบัตรประชาชน *</label>
+            <input type="text" class="form-input" id="modal-national-id" maxlength="13">
+          </div>
+          <div class="form-group">
+            <label class="form-label">เบอร์โทรศัพท์</label>
+            <input type="text" class="form-input" id="modal-phone" maxlength="10">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ที่อยู่</label>
+          <textarea class="form-textarea" id="modal-address"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="guest-modal-cancel">ยกเลิก</button>
+        <button class="btn btn-primary" id="guest-modal-save">💾 บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Checkout Confirm Modal ===== -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>ยืนยันการเช็คเอาท์</h3>
+        <button class="modal-close" id="checkout-modal-close">✕</button>
+      </div>
+      <div class="modal-body" id="checkout-modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="checkout-modal-cancel">ยกเลิก</button>
+        <button class="btn btn-danger" id="checkout-modal-confirm">📤 ยืนยันเช็คเอาท์</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Room Status Modal ===== -->
+  <div class="modal-overlay" id="room-status-modal">
+    <div class="modal" style="max-width:400px;">
+      <div class="modal-header">
+        <h3 id="room-status-modal-title">เปลี่ยนสถานะห้อง</h3>
+        <button class="modal-close" id="room-status-modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">สถานะห้อง</label>
+          <select class="form-select" id="room-status-select">
+            <option value="AVAILABLE">ว่าง (Available)</option>
+            <option value="OCCUPIED">มีผู้เข้าพัก (Occupied)</option>
+            <option value="CLEANING">ทำความสะอาด (Cleaning)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="room-status-cancel">ยกเลิก</button>
+        <button class="btn btn-primary" id="room-status-save">💾 บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

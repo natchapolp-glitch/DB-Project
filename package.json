@@ -1,0 +1,21 @@
+{
+  "name": "mansion-pos",
+  "version": "1.0.0",
+  "description": "ระบบจัดการแมนชั่นรายวัน (Mansion POS)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "jest --verbose --forceExit --detectOpenHandles",
+    "init-db": "node -e \"const fs=require('fs');const mysql=require('mysql2/promise');(async()=>{const c=await mysql.createConnection({host:'localhost',port:3306,user:'root',password:'167349943167',multipleStatements:true});const sql=fs.readFileSync('init-db.sql','utf8');await c.query(sql);console.log('Database initialized!');await c.end();})()\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  }
+}
