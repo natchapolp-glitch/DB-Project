@@ -2,11 +2,12 @@
 -- Mansion POS System - Database Initialization
 -- =====================================================
 
-CREATE DATABASE IF NOT EXISTS mansion_pos
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
+-- =====================================================
+-- Mansion POS System - Database Initialization
+-- =====================================================
 
-USE mansion_pos;
+-- Tables are created in the database specified by the connection (e.g., DATABASE_URL)
+
 
 -- ----- Guest Table -----
 CREATE TABLE IF NOT EXISTS guest (
