@@ -2,7 +2,7 @@
 // Mansion POS System - Frontend Application
 // =====================================================
 
-const API = 'http://localhost:3000/api';
+const API = '/api';
 
 // ===== State =====
 let currentPage = 'dashboard';

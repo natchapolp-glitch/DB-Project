@@ -7,7 +7,10 @@
     "start": "node server.js",
     "dev": "node server.js",
     "test": "jest --verbose --forceExit --detectOpenHandles",
-    "init-db": "node -e \"const fs=require('fs');const mysql=require('mysql2/promise');(async()=>{const c=await mysql.createConnection({host:'localhost',port:3306,user:'root',password:'167349943167',multipleStatements:true});const sql=fs.readFileSync('init-db.sql','utf8');await c.query(sql);console.log('Database initialized!');await c.end();})()\""
+    "init-db": "node -e \"const fs=require('fs');const mysql=require('mysql2/promise');(async()=>{const c=await mysql.createConnection({host:process.env.MYSQL_HOST||'localhost',port:parseInt(process.env.MYSQL_PORT||'3306'),user:process.env.MYSQL_USER||'root',password:process.env.MYSQL_PASSWORD||'167349943167',multipleStatements:true});const sql=fs.readFileSync('init-db.sql','utf8');await c.query(sql);console.log('Database initialized!');await c.end();})()\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "cors": "^2.8.5",

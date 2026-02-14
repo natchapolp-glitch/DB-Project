@@ -13,11 +13,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ----- MySQL Connection Pool -----
 const pool = mysql.createPool({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: '167349943167',
-  database: 'mansion_pos',
+  host: process.env.MYSQL_HOST || 'localhost',
+  port: parseInt(process.env.MYSQL_PORT || '3306'),
+  user: process.env.MYSQL_USER || 'root',
+  password: process.env.MYSQL_PASSWORD || '167349943167',
+  database: process.env.MYSQL_DATABASE || 'mansion_pos',
   waitForConnections: true,
   connectionLimit: 10,
   charset: 'utf8mb4'
@@ -508,7 +508,7 @@ app.get('/api/dashboard', async (req, res) => {
 });
 
 // ===================== START SERVER =====================
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`🏨 Mansion POS Server running on http://localhost:${PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🏨 Mansion POS Server running on port ${PORT}`);
 });
