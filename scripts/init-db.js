@@ -1,33 +1,33 @@
 const fs = require('fs');
 const mysql = require('mysql2/promise');
+const { URL } = require('url');
 
 async function initDb() {
     try {
-        let connection;
+        let config = {
+            multipleStatements: true,
+            ssl: { rejectUnauthorized: false }
+        };
 
-        // Check for DATABASE_URL first (Railway Public/Private Networking)
         if (process.env.DATABASE_URL) {
-            console.log('Connecting via DATABASE_URL...');
-            connection = await mysql.createConnection({
-                uri: process.env.DATABASE_URL,
-                multipleStatements: true, // Crucial for init-db.sql
-                ssl: {
-                    rejectUnauthorized: false // Often needed for cloud DBs
-                }
-            });
+            console.log('Parsing DATABASE_URL for connection...');
+            const dbUrl = new URL(process.env.DATABASE_URL);
+            config.host = dbUrl.hostname;
+            config.port = dbUrl.port;
+            config.user = dbUrl.username;
+            config.password = dbUrl.password;
+            config.database = dbUrl.pathname.substring(1); // remove leading '/'
         } else {
-            // Fallback to individual variables
-            console.log('Connecting via individual variables...');
-            connection = await mysql.createConnection({
-                host: process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost',
-                port: parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || '3306'),
-                user: process.env.MYSQLUSER || process.env.MYSQL_USER || 'root',
-                password: process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || '167349943167',
-                database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || 'mansion_pos',
-                multipleStatements: true
-            });
+            console.log('Using individual environment variables...');
+            config.host = process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost';
+            config.port = parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || '3306');
+            config.user = process.env.MYSQLUSER || process.env.MYSQL_USER || 'root';
+            config.password = process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || '167349943167';
+            config.database = process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || 'mansion_pos';
         }
 
+        console.log(`Connecting to ${config.host}:${config.port} as ${config.user}...`);
+        const connection = await mysql.createConnection(config);
         console.log('Connected to MySQL!');
 
         const sql = fs.readFileSync('init-db.sql', 'utf8');
