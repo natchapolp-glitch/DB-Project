@@ -66,22 +66,47 @@ CREATE TABLE IF NOT EXISTS deposit (
 ) ENGINE=InnoDB;
 
 -- =====================================================
--- Seed Room Data (15 rooms: 101-108 single, 201-207 double)
+-- Seed Room Data (33 rooms: 101-111, 201-211, 301-311)
+-- Odd room numbers = single bed (350/day)
+-- Even room numbers = double bed (400/day)
 -- =====================================================
 INSERT INTO room (room_number, bed_type, price_per_day, status) VALUES
+  -- Floor 1
   ('101', 'single', 350.00, 'AVAILABLE'),
-  ('102', 'single', 350.00, 'AVAILABLE'),
+  ('102', 'double', 400.00, 'AVAILABLE'),
   ('103', 'single', 350.00, 'AVAILABLE'),
-  ('104', 'single', 350.00, 'AVAILABLE'),
+  ('104', 'double', 400.00, 'AVAILABLE'),
   ('105', 'single', 350.00, 'AVAILABLE'),
-  ('106', 'single', 350.00, 'AVAILABLE'),
+  ('106', 'double', 400.00, 'AVAILABLE'),
   ('107', 'single', 350.00, 'AVAILABLE'),
-  ('108', 'single', 350.00, 'AVAILABLE'),
-  ('201', 'double', 400.00, 'AVAILABLE'),
+  ('108', 'double', 400.00, 'AVAILABLE'),
+  ('109', 'single', 350.00, 'AVAILABLE'),
+  ('110', 'double', 400.00, 'AVAILABLE'),
+  ('111', 'single', 350.00, 'AVAILABLE'),
+  -- Floor 2
+  ('201', 'single', 350.00, 'AVAILABLE'),
   ('202', 'double', 400.00, 'AVAILABLE'),
-  ('203', 'double', 400.00, 'AVAILABLE'),
+  ('203', 'single', 350.00, 'AVAILABLE'),
   ('204', 'double', 400.00, 'AVAILABLE'),
-  ('205', 'double', 400.00, 'AVAILABLE'),
+  ('205', 'single', 350.00, 'AVAILABLE'),
   ('206', 'double', 400.00, 'AVAILABLE'),
-  ('207', 'double', 400.00, 'AVAILABLE')
-ON DUPLICATE KEY UPDATE room_number = VALUES(room_number);
+  ('207', 'single', 350.00, 'AVAILABLE'),
+  ('208', 'double', 400.00, 'AVAILABLE'),
+  ('209', 'single', 350.00, 'AVAILABLE'),
+  ('210', 'double', 400.00, 'AVAILABLE'),
+  ('211', 'single', 350.00, 'AVAILABLE'),
+  -- Floor 3
+  ('301', 'single', 350.00, 'AVAILABLE'),
+  ('302', 'double', 400.00, 'AVAILABLE'),
+  ('303', 'single', 350.00, 'AVAILABLE'),
+  ('304', 'double', 400.00, 'AVAILABLE'),
+  ('305', 'single', 350.00, 'AVAILABLE'),
+  ('306', 'double', 400.00, 'AVAILABLE'),
+  ('307', 'single', 350.00, 'AVAILABLE'),
+  ('308', 'double', 400.00, 'AVAILABLE'),
+  ('309', 'single', 350.00, 'AVAILABLE'),
+  ('310', 'double', 400.00, 'AVAILABLE'),
+  ('311', 'single', 350.00, 'AVAILABLE')
+ON DUPLICATE KEY UPDATE
+  bed_type = VALUES(bed_type),
+  price_per_day = VALUES(price_per_day);
