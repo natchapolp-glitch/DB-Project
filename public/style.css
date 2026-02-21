@@ -304,8 +304,10 @@ body {
 }
 
 .stat-card .stat-icon {
-  font-size: 1.6rem;
   margin-bottom: 10px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
 }
 
 .stat-card .stat-value {
@@ -788,8 +790,11 @@ body {
 }
 
 .empty-state .empty-icon {
-  font-size: 3rem;
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
 }
 
 .empty-state p {
@@ -972,6 +977,9 @@ body {
   color: var(--primary);
   font-weight: 700;
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .summary-row {
@@ -1028,6 +1036,12 @@ body {
   align-items: center;
   gap: 10px;
   min-width: 280px;
+}
+
+.toast-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .toast-success {

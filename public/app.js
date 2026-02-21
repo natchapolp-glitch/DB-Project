@@ -53,13 +53,38 @@ function statusLabel(s) {
   return m[s] || s;
 }
 
+// ===== SVG Icon Helper =====
+function svgIcon(name, size = 18) {
+  const icons = {
+    door: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"/></svg>`,
+    check: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    bed: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>`,
+    broom: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 10"/><path d="M6 10h12l1 10H5l1-10z"/><path d="M5 20h14v2H5z"/></svg>`,
+    money: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+    user: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+    edit: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+    trash: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+    home: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+    refresh: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`,
+    clipboard: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>`,
+    logout: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
+    warning: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    key: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
+    chart: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+    calendar: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+    x: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+    info: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`
+  };
+  return icons[name] || '';
+}
+
 // ===== Toast =====
 function showToast(message, type = 'success') {
   const container = document.getElementById('toast-container');
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
-  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-  toast.innerHTML = `<span>${icons[type] || ''}</span> ${message}`;
+  const iconMap = { success: 'check', error: 'x', warning: 'warning', info: 'info' };
+  toast.innerHTML = `<span class="toast-icon">${svgIcon(iconMap[type] || 'info', 16)}</span> ${message}`;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
 }
@@ -158,27 +183,27 @@ async function loadDashboard() {
 
     document.getElementById('dashboard-stats').innerHTML = `
       <div class="stat-card teal">
-        <div class="stat-icon">🚪</div>
+        <div class="stat-icon">${svgIcon('door', 24)}</div>
         <div class="stat-value">${rooms.length}</div>
         <div class="stat-label">ห้องทั้งหมด</div>
       </div>
       <div class="stat-card green">
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon">${svgIcon('check', 24)}</div>
         <div class="stat-value">${available}</div>
         <div class="stat-label">ห้องว่าง</div>
       </div>
       <div class="stat-card blue">
-        <div class="stat-icon">🛏️</div>
+        <div class="stat-icon">${svgIcon('bed', 24)}</div>
         <div class="stat-value">${occupied}</div>
         <div class="stat-label">มีผู้เข้าพัก</div>
       </div>
       <div class="stat-card amber">
-        <div class="stat-icon">🧹</div>
+        <div class="stat-icon">${svgIcon('broom', 24)}</div>
         <div class="stat-value">${cleaning}</div>
         <div class="stat-label">ทำความสะอาด</div>
       </div>
       <div class="stat-card rose">
-        <div class="stat-icon">💰</div>
+        <div class="stat-icon">${svgIcon('money', 24)}</div>
         <div class="stat-value">฿${formatMoney(dashboard.today_revenue)}</div>
         <div class="stat-label">รายได้วันนี้</div>
       </div>
@@ -248,8 +273,8 @@ async function loadGuests(searchTerm = '') {
         <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${g.address || '-'}</td>
         <td>
           <div style="display:flex;gap:6px;">
-            <button class="btn btn-sm btn-secondary" onclick="editGuest(${g.guest_id})">✏️</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteGuest(${g.guest_id})">🗑️</button>
+            <button class="btn btn-sm btn-secondary" onclick="editGuest(${g.guest_id})">${svgIcon('edit', 14)}</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteGuest(${g.guest_id})">${svgIcon('trash', 14)}</button>
           </div>
         </td>
       </tr>
@@ -360,7 +385,7 @@ async function loadCheckinRooms() {
     const rooms = await apiGet('/rooms?status=AVAILABLE');
     const container = document.getElementById('checkin-rooms');
     if (rooms.length === 0) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏠</div><p>ไม่มีห้องว่าง</p></div>';
+      container.innerHTML = `<div class="empty-state"><div class="empty-icon">${svgIcon('home', 48)}</div><p>ไม่มีห้องว่าง</p></div>`;
       return;
     }
     container.innerHTML = rooms.map(r => `
@@ -404,7 +429,7 @@ async function searchGuestForCheckin() {
       container.innerHTML = `
         <div class="guest-search-result">
           <div class="guest-info-text">
-            <h4>🔄 พบผู้เข้าพักเก่า: ${g.first_name} ${g.last_name}</h4>
+            <h4>${svgIcon('refresh', 16)} พบผู้เข้าพักเก่า: ${g.first_name} ${g.last_name}</h4>
             <p>เลขบัตร: ${g.national_id} | โทร: ${g.phone || '-'}</p>
           </div>
           <span class="badge badge-info">ผู้เข้าพักซ้ำ</span>
@@ -467,7 +492,7 @@ function proceedToConfirm() {
 
   document.getElementById('checkin-summary').innerHTML = `
     <div class="summary-box">
-      <h4>📋 สรุปการเช็คอิน</h4>
+      <h4>${svgIcon('clipboard', 18)} สรุปการเช็คอิน</h4>
       <div class="summary-row">
         <span>ห้อง</span>
         <span>${room.room_number} (${bedTypeLabel(room.bed_type)})</span>
@@ -600,7 +625,7 @@ async function loadActiveStays() {
           </div>
           <div class="detail-row">
             <span class="label">ระยะเวลา</span>
-            <span class="value">${diffHours} ชั่วโมง ${isLate ? '⚠️ เกินกำหนด' : ''}</span>
+            <span class="value">${diffHours} ชั่วโมง ${isLate ? svgIcon('warning', 14) + ' เกินกำหนด' : ''}</span>
           </div>
           <div class="detail-row">
             <span class="label">เงินมัดจำ</span>
@@ -608,7 +633,7 @@ async function loadActiveStays() {
           </div>
           <div style="margin-top:14px;">
             <button class="btn btn-danger" onclick="openCheckoutModal(${s.stay_id}, '${s.first_name} ${s.last_name}', '${s.room_number}', '${s.check_in}', ${s.price_per_day}, ${plannedDays})">
-              📤 เช็คเอาท์
+              ${svgIcon('logout', 16)} เช็คเอาท์
             </button>
           </div>
         </div>
@@ -641,7 +666,7 @@ function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay, 
 
   document.getElementById('checkout-modal-body').innerHTML = `
     <div class="summary-box">
-      <h4>📋 สรุปการเช็คเอาท์</h4>
+      <h4>${svgIcon('clipboard', 18)} สรุปการเช็คเอาท์</h4>
       <div class="summary-row">
         <span>ผู้เข้าพัก</span>
         <span>${guestName}</span>
@@ -664,12 +689,12 @@ function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay, 
       </div>
       ${extraDays > 0 ? `
         <div class="summary-row" style="color:var(--danger);">
-          <span>⚠️ เกินกำหนด ${extraDays} วัน</span>
+          <span>${svgIcon('warning', 16)} เกินกำหนด ${extraDays} วัน</span>
           <span>+฿${formatMoney(lateFee)}</span>
         </div>
       ` : `
         <div class="summary-row" style="color:var(--success);">
-          <span>✅ ไม่เกินกำหนด</span>
+          <span>${svgIcon('check', 16)} ไม่เกินกำหนด</span>
           <span>ไม่มีค่าปรับ</span>
         </div>
       `}
@@ -677,7 +702,7 @@ function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay, 
     <div style="margin-top:16px;">
       <label class="checkbox-wrap">
         <input type="checkbox" id="checkout-key-returned" checked>
-        <span>🔑 ผู้เข้าพักคืนกุญแจแล้ว (คืนเงินมัดจำ ฿100)</span>
+        <span>${svgIcon('key', 16)} ผู้เข้าพักคืนกุญแจแล้ว (คืนเงินมัดจำ ฿100)</span>
       </label>
     </div>
     <div class="form-group" style="margin-top:14px;">
@@ -759,26 +784,26 @@ async function loadReport() {
       'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
     document.getElementById('report-content').innerHTML = `
-      <div class="section-title">📊 รายงานเดือน${thMonths[report.month]} ${report.year}</div>
+      <div class="section-title">${svgIcon('chart', 18)} รายงานเดือน${thMonths[report.month]} ${report.year}</div>
 
       <div class="stats-grid">
         <div class="stat-card teal">
-          <div class="stat-icon">👤</div>
+          <div class="stat-icon">${svgIcon('user', 24)}</div>
           <div class="stat-value">${s.total_guests}</div>
           <div class="stat-label">ผู้เข้าพักทั้งหมด</div>
         </div>
         <div class="stat-card blue">
-          <div class="stat-icon">🛏️</div>
+          <div class="stat-icon">${svgIcon('bed', 24)}</div>
           <div class="stat-value">${s.total_stays}</div>
           <div class="stat-label">การเข้าพักทั้งหมด</div>
         </div>
         <div class="stat-card green">
-          <div class="stat-icon">🚪</div>
+          <div class="stat-icon">${svgIcon('door', 24)}</div>
           <div class="stat-value">${s.rooms_used}</div>
           <div class="stat-label">ห้องที่ถูกใช้งาน</div>
         </div>
         <div class="stat-card amber">
-          <div class="stat-icon">💰</div>
+          <div class="stat-icon">${svgIcon('money', 24)}</div>
           <div class="stat-value">฿${formatMoney(s.total_revenue)}</div>
           <div class="stat-label">รายได้รวม</div>
         </div>
@@ -786,7 +811,7 @@ async function loadReport() {
 
       <div class="report-grid">
         <div class="report-card">
-          <h4>💰 รายได้แยกตามประเภท</h4>
+          <h4>${svgIcon('money', 18)} รายได้แยกตามประเภท</h4>
           <div class="report-item">
             <span class="label">ค่าห้องพัก</span>
             <span class="value">฿${formatMoney(s.room_revenue)}</span>
@@ -810,7 +835,7 @@ async function loadReport() {
         </div>
 
         <div class="report-card">
-          <h4>🛏️ แยกตามประเภทห้อง</h4>
+          <h4>${svgIcon('bed', 18)} แยกตามประเภทห้อง</h4>
           ${report.room_type_breakdown.length > 0 ? report.room_type_breakdown.map(rt => `
             <div class="report-item">
               <span class="label">${bedTypeLabel(rt.bed_type)} (${rt.count} ครั้ง)</span>
@@ -822,7 +847,7 @@ async function loadReport() {
 
       ${report.daily_breakdown.length > 0 ? `
         <div style="margin-top:24px;">
-          <div class="section-title">📅 รายละเอียดรายวัน</div>
+          <div class="section-title">${svgIcon('calendar', 18)} รายละเอียดรายวัน</div>
           <div class="table-container">
             <table class="data-table">
               <thead>

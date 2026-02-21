@@ -14,7 +14,13 @@
     <!-- ===== Sidebar ===== -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
-        <div class="brand-icon">🏨</div>
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
         <div>
           <h1>Mansion POS</h1>
           <p>ระบบจัดการแมนชั่น</p>
@@ -23,29 +29,60 @@
       <nav class="sidebar-nav">
         <div class="nav-section-title">เมนูหลัก</div>
         <button class="nav-item active" data-page="dashboard" id="nav-dashboard">
-          <span class="nav-icon">📊</span> แดชบอร์ด
+          <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg></span> แดชบอร์ด
         </button>
         <button class="nav-item" data-page="rooms" id="nav-rooms">
-          <span class="nav-icon">🚪</span> จัดการห้องพัก
+          <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 19H2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+              <path d="M2 14h20" />
+            </svg></span> จัดการห้องพัก
         </button>
         <button class="nav-item" data-page="guests" id="nav-guests">
-          <span class="nav-icon">👤</span> จัดการผู้เข้าพัก
+          <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg></span> จัดการผู้เข้าพัก
         </button>
 
         <div class="nav-section-title">การดำเนินงาน</div>
         <button class="nav-item" data-page="checkin" id="nav-checkin">
-          <span class="nav-icon">📥</span> เช็คอิน
+          <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 10 20 15 15 20" />
+              <path d="M4 4v7a4 4 0 0 0 4 4h12" />
+            </svg></span> เช็คอิน
         </button>
         <button class="nav-item" data-page="checkout" id="nav-checkout">
-          <span class="nav-icon">📤</span> เช็คเอาท์
+          <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 10 4 15 9 20" />
+              <path d="M20 4v7a4 4 0 0 1-4 4H4" />
+            </svg></span> เช็คเอาท์
         </button>
 
-        <div class="nav-section-title">การเงิน & รายงาน</div>
+        <div class="nav-section-title">การเงิน &amp; รายงาน</div>
         <button class="nav-item" data-page="payments" id="nav-payments">
-          <span class="nav-icon">💰</span> การชำระเงิน
+          <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg></span> การชำระเงิน
         </button>
         <button class="nav-item" data-page="reports" id="nav-reports">
-          <span class="nav-icon">📈</span> รายงานรายเดือน
+          <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4" />
+              <line x1="6" y1="20" x2="6" y2="14" />
+            </svg></span> รายงานรายเดือน
         </button>
       </nav>
     </aside>
@@ -56,7 +93,14 @@
     <main class="main-content">
       <header class="page-header">
         <div style="display:flex; align-items:center; gap:12px;">
-          <button class="hamburger-btn" id="hamburger-btn" aria-label="เปิดเมนู">☰</button>
+          <button class="hamburger-btn" id="hamburger-btn" aria-label="เปิดเมนู">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
           <div>
             <h2 id="page-title">แดชบอร์ด</h2>
             <div class="header-subtitle" id="page-subtitle">ภาพรวมระบบจัดการแมนชั่น</div>
@@ -72,7 +116,14 @@
         <!-- ===== Dashboard Page ===== -->
         <section class="page-section active" id="page-dashboard">
           <div class="stats-grid" id="dashboard-stats"></div>
-          <div class="section-title">🚪 สถานะห้องพักทั้งหมด</div>
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 19H2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+              <path d="M2 14h20" />
+            </svg>
+            สถานะห้องพักทั้งหมด
+          </div>
           <div class="room-legend">
             <div class="legend-item">
               <div class="legend-dot available"></div> ว่าง (Available)
@@ -108,12 +159,25 @@
           <div class="toolbar">
             <div class="search-bar" style="margin-bottom:0;">
               <div class="search-input-wrap">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </span>
                 <input type="text" class="form-input" id="guest-search" placeholder="ค้นหาชื่อ, เลขบัตร, เบอร์โทร..."
                   style="padding-left:40px;">
               </div>
             </div>
-            <button class="btn btn-primary" id="btn-add-guest">➕ เพิ่มผู้เข้าพัก</button>
+            <button class="btn btn-primary" id="btn-add-guest">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              เพิ่มผู้เข้าพัก
+            </button>
           </div>
           <div class="table-container">
             <table class="data-table">
@@ -130,7 +194,13 @@
             </table>
           </div>
           <div class="empty-state" id="guests-empty" style="display:none;">
-            <div class="empty-icon">👤</div>
+            <div class="empty-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
             <p>ยังไม่มีข้อมูลผู้เข้าพัก</p>
           </div>
         </section>
@@ -160,10 +230,23 @@
           <!-- Step 2: Guest Info -->
           <div id="checkin-phase2" style="display:none;">
             <div style="display:flex; gap:12px; margin-bottom:16px;">
-              <button class="btn btn-secondary" id="checkin-back1">← ย้อนกลับ</button>
+              <button class="btn btn-secondary" id="checkin-back1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+                ย้อนกลับ
+              </button>
             </div>
             <div style="max-width:600px;">
-              <div class="section-title">🔍 ค้นหาผู้เข้าพักเก่า (เลขบัตรประชาชน)</div>
+              <div class="section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                ค้นหาผู้เข้าพักเก่า (เลขบัตรประชาชน)
+              </div>
               <div style="display:flex; gap:12px; margin-bottom:16px;">
                 <input type="text" class="form-input" id="checkin-search-nid" placeholder="กรอกเลขบัตร 13 หลัก"
                   maxlength="13" inputmode="numeric" pattern="[0-9]*" style="flex:1;">
@@ -171,7 +254,16 @@
               </div>
               <div id="checkin-guest-found" style="display:none;"></div>
 
-              <div class="section-title">📋 ข้อมูลผู้เข้าพัก</div>
+              <div class="section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                ข้อมูลผู้เข้าพัก
+              </div>
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">ชื่อ *</label>
@@ -212,20 +304,42 @@
                   </select>
                 </div>
               </div>
-              <button class="btn btn-primary" id="btn-checkin-next" style="margin-top:8px;">ถัดไป →</button>
+              <button class="btn btn-primary" id="btn-checkin-next" style="margin-top:8px;">
+                ถัดไป
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
             </div>
           </div>
 
           <!-- Step 3: Confirm -->
           <div id="checkin-phase3" style="display:none;">
             <div style="display:flex; gap:12px; margin-bottom:16px;">
-              <button class="btn btn-secondary" id="checkin-back2">← ย้อนกลับ</button>
+              <button class="btn btn-secondary" id="checkin-back2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+                ย้อนกลับ
+              </button>
             </div>
             <div style="max-width:500px;">
-              <div class="section-title">✅ ยืนยันการเช็คอิน</div>
+              <div class="section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                ยืนยันการเช็คอิน
+              </div>
               <div id="checkin-summary"></div>
               <button class="btn btn-success" id="btn-confirm-checkin" style="margin-top:16px; width:100%;">
-                ✅ ยืนยันเช็คอิน
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                ยืนยันเช็คอิน
               </button>
             </div>
           </div>
@@ -233,17 +347,37 @@
 
         <!-- ===== Check-out Page ===== -->
         <section class="page-section" id="page-checkout">
-          <div class="section-title">📤 ผู้เข้าพักที่เช็คอินอยู่</div>
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 10 4 15 9 20" />
+              <path d="M20 4v7a4 4 0 0 1-4 4H4" />
+            </svg>
+            ผู้เข้าพักที่เช็คอินอยู่
+          </div>
           <div id="checkout-list"></div>
           <div class="empty-state" id="checkout-empty" style="display:none;">
-            <div class="empty-icon">🏠</div>
+            <div class="empty-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
             <p>ไม่มีผู้เข้าพักที่เช็คอินอยู่ในขณะนี้</p>
           </div>
         </section>
 
         <!-- ===== Payments Page ===== -->
         <section class="page-section" id="page-payments">
-          <div class="section-title">💰 ประวัติการชำระเงิน</div>
+          <div class="section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+            ประวัติการชำระเงิน
+          </div>
           <div class="table-container">
             <table class="data-table">
               <thead>
@@ -281,7 +415,15 @@
             </select>
             <label class="form-label" style="margin-bottom:0;">ปี:</label>
             <input type="number" class="form-input" id="report-year" style="width:100px;" value="2026">
-            <button class="btn btn-primary" id="btn-load-report">📊 ดูรายงาน</button>
+            <button class="btn btn-primary" id="btn-load-report">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+              ดูรายงาน
+            </button>
           </div>
           <div id="report-content"></div>
         </section>
@@ -295,7 +437,13 @@
     <div class="modal">
       <div class="modal-header">
         <h3 id="guest-modal-title">เพิ่มผู้เข้าพัก</h3>
-        <button class="modal-close" id="guest-modal-close">✕</button>
+        <button class="modal-close" id="guest-modal-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="edit-guest-id">
@@ -327,7 +475,15 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="guest-modal-cancel">ยกเลิก</button>
-        <button class="btn btn-primary" id="guest-modal-save">💾 บันทึก</button>
+        <button class="btn btn-primary" id="guest-modal-save">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
+          บันทึก
+        </button>
       </div>
     </div>
   </div>
@@ -337,12 +493,25 @@
     <div class="modal">
       <div class="modal-header">
         <h3>ยืนยันการเช็คเอาท์</h3>
-        <button class="modal-close" id="checkout-modal-close">✕</button>
+        <button class="modal-close" id="checkout-modal-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
       <div class="modal-body" id="checkout-modal-body"></div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="checkout-modal-cancel">ยกเลิก</button>
-        <button class="btn btn-danger" id="checkout-modal-confirm">📤 ยืนยันเช็คเอาท์</button>
+        <button class="btn btn-danger" id="checkout-modal-confirm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 10 4 15 9 20" />
+            <path d="M20 4v7a4 4 0 0 1-4 4H4" />
+          </svg>
+          ยืนยันเช็คเอาท์
+        </button>
       </div>
     </div>
   </div>
@@ -352,7 +521,13 @@
     <div class="modal" style="max-width:400px;">
       <div class="modal-header">
         <h3 id="room-status-modal-title">เปลี่ยนสถานะห้อง</h3>
-        <button class="modal-close" id="room-status-modal-close">✕</button>
+        <button class="modal-close" id="room-status-modal-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -366,7 +541,15 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="room-status-cancel">ยกเลิก</button>
-        <button class="btn btn-primary" id="room-status-save">💾 บันทึก</button>
+        <button class="btn btn-primary" id="room-status-save">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
+          บันทึก
+        </button>
       </div>
     </div>
   </div>
