@@ -67,6 +67,14 @@ app.post('/api/guests', async (req, res) => {
     if (!first_name || !last_name || !national_id) {
       return res.status(400).json({ error: 'first_name, last_name, and national_id are required' });
     }
+    // Validate national_id: exactly 13 digits
+    if (!/^\d{13}$/.test(national_id)) {
+      return res.status(400).json({ error: 'เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก' });
+    }
+    // Validate phone: exactly 10 digits (if provided)
+    if (phone && !/^\d{10}$/.test(phone)) {
+      return res.status(400).json({ error: 'เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก' });
+    }
     // Check for return customer
     const [existing] = await pool.query('SELECT * FROM guest WHERE national_id = ?', [national_id]);
     if (existing.length > 0) {
@@ -90,6 +98,14 @@ app.post('/api/guests', async (req, res) => {
 app.put('/api/guests/:id', async (req, res) => {
   try {
     const { first_name, last_name, national_id, phone, address } = req.body;
+    // Validate national_id: exactly 13 digits
+    if (national_id && !/^\d{13}$/.test(national_id)) {
+      return res.status(400).json({ error: 'เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก' });
+    }
+    // Validate phone: exactly 10 digits (if provided)
+    if (phone && !/^\d{10}$/.test(phone)) {
+      return res.status(400).json({ error: 'เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก' });
+    }
     await pool.query(
       'UPDATE guest SET first_name=?, last_name=?, national_id=?, phone=?, address=? WHERE guest_id=?',
       [first_name, last_name, national_id, phone, address, req.params.id]
@@ -152,9 +168,14 @@ app.post('/api/checkin', async (req, res) => {
   const conn = await pool.getConnection();
   try {
     await conn.beginTransaction();
-    const { guest_id, room_id, payment_method } = req.body;
+    const { guest_id, room_id, payment_method, planned_days } = req.body;
     if (!guest_id || !room_id) {
       return res.status(400).json({ error: 'guest_id and room_id are required' });
+    }
+
+    const days = parseInt(planned_days) || 1;
+    if (days < 1) {
+      return res.status(400).json({ error: 'planned_days must be at least 1' });
     }
 
     // Check room availability
@@ -164,11 +185,11 @@ app.post('/api/checkin', async (req, res) => {
       return res.status(400).json({ error: 'Room is not available' });
     }
 
-    // Create stay record (check-in at now, expected checkout next day 12:00)
+    // Create stay record with planned_days
     const now = new Date();
     const [stayResult] = await conn.query(
-      'INSERT INTO stay (guest_id, room_id, check_in, stay_status) VALUES (?, ?, ?, "CHECKED_IN")',
-      [guest_id, room_id, now]
+      'INSERT INTO stay (guest_id, room_id, planned_days, check_in, stay_status) VALUES (?, ?, ?, ?, "CHECKED_IN")',
+      [guest_id, room_id, days, now]
     );
     const stayId = stayResult.insertId;
 
@@ -181,11 +202,12 @@ app.post('/api/checkin', async (req, res) => {
       [stayId, now]
     );
 
-    // Record room charge payment
+    // Record room charge payment (planned_days * price_per_day)
     const roomPrice = rooms[0].price_per_day;
+    const totalRoomCharge = parseFloat(roomPrice) * days;
     await conn.query(
       'INSERT INTO payment (stay_id, amount, payment_type, method, payment_date) VALUES (?, ?, "ROOM_CHARGE", ?, ?)',
-      [stayId, roomPrice, payment_method || 'CASH', now]
+      [stayId, totalRoomCharge, payment_method || 'CASH', now]
     );
 
     // Record deposit payment
@@ -208,9 +230,10 @@ app.post('/api/checkin', async (req, res) => {
 
     res.status(201).json({
       stay: stayInfo[0],
-      room_charge: parseFloat(roomPrice),
+      planned_days: days,
+      room_charge: totalRoomCharge,
       deposit: 100,
-      total_paid: parseFloat(roomPrice) + 100
+      total_paid: totalRoomCharge + 100
     });
   } catch (err) {
     await conn.rollback();
@@ -244,20 +267,21 @@ app.post('/api/checkout/:stayId', async (req, res) => {
     const stay = stays[0];
     const now = new Date();
     const checkInDate = new Date(stay.check_in);
+    const plannedDays = stay.planned_days || 1;
 
-    // Calculate late checkout fee
-    // Policy: checkout at 12:00 next day. If checkout after 12:00, charge extra day
+    // Calculate late checkout fee based on planned_days
+    // Policy: checkout at 12:00 on (check_in_day + planned_days). If checkout after that, charge extra
     const checkInDay = new Date(checkInDate);
     checkInDay.setHours(0, 0, 0, 0);
 
     const expectedCheckout = new Date(checkInDay);
-    expectedCheckout.setDate(expectedCheckout.getDate() + 1);
+    expectedCheckout.setDate(expectedCheckout.getDate() + plannedDays);
     expectedCheckout.setHours(12, 0, 0, 0);
 
     let lateFee = 0;
     let extraDays = 0;
     if (now > expectedCheckout) {
-      // Calculate how many extra days (each day boundary after 12:00)
+      // Calculate how many extra days beyond planned stay
       const diffMs = now - expectedCheckout;
       extraDays = Math.ceil(diffMs / (24 * 60 * 60 * 1000));
       lateFee = extraDays * parseFloat(stay.price_per_day);
@@ -301,6 +325,7 @@ app.post('/api/checkout/:stayId', async (req, res) => {
       room_number: stay.room_number,
       check_in: stay.check_in,
       check_out: now,
+      planned_days: plannedDays,
       extra_days: extraDays,
       late_fee: lateFee,
       deposit_returned: depositReturned,
@@ -319,7 +344,7 @@ app.post('/api/checkout/:stayId', async (req, res) => {
 app.get('/api/stays/active', async (req, res) => {
   try {
     const [rows] = await pool.query(`
-      SELECT s.*, g.first_name, g.last_name, g.national_id, g.phone,
+      SELECT s.*, s.planned_days, g.first_name, g.last_name, g.national_id, g.phone,
              r.room_number, r.bed_type, r.price_per_day,
              d.deposit_status, d.deposit_amount
       FROM stay s

@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS stay (
   stay_id      INT AUTO_INCREMENT PRIMARY KEY,
   guest_id     INT NOT NULL,
   room_id      INT NOT NULL,
+  planned_days INT NOT NULL DEFAULT 1,
   check_in     DATETIME NOT NULL,
   check_out    DATETIME DEFAULT NULL,
   stay_status  ENUM('CHECKED_IN','CHECKED_OUT') NOT NULL DEFAULT 'CHECKED_IN',

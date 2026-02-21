@@ -300,6 +300,14 @@ async function saveGuest() {
     showToast('กรุณากรอกชื่อ นามสกุล และเลขบัตรประชาชน', 'warning');
     return;
   }
+  if (!/^\d{13}$/.test(data.national_id)) {
+    showToast('เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก', 'warning');
+    return;
+  }
+  if (data.phone && !/^\d{10}$/.test(data.phone)) {
+    showToast('เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก', 'warning');
+    return;
+  }
 
   try {
     if (id) {
@@ -344,6 +352,7 @@ function clearCheckinForm() {
     document.getElementById(id).value = '';
   });
   document.getElementById('checkin-search-nid').value = '';
+  document.getElementById('ci-planned-days').value = '1';
 }
 
 async function loadCheckinRooms() {
@@ -427,20 +436,34 @@ function proceedToConfirm() {
   const phone = document.getElementById('ci-phone').value.trim();
   const address = document.getElementById('ci-address').value.trim();
   const method = document.getElementById('ci-payment-method').value;
+  const plannedDays = parseInt(document.getElementById('ci-planned-days').value) || 1;
 
   if (!firstName || !lastName || !nationalId) {
     showToast('กรุณากรอกชื่อ นามสกุล และเลขบัตรประชาชน', 'warning');
     return;
   }
+  if (!/^\d{13}$/.test(nationalId)) {
+    showToast('เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก', 'warning');
+    return;
+  }
+  if (phone && !/^\d{10}$/.test(phone)) {
+    showToast('เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก', 'warning');
+    return;
+  }
+  if (plannedDays < 1) {
+    showToast('จำนวนวันพักต้องอย่างน้อย 1 วัน', 'warning');
+    return;
+  }
 
-  checkinData.guest = { firstName, lastName, nationalId, phone, address, method };
+  checkinData.guest = { firstName, lastName, nationalId, phone, address, method, plannedDays };
 
   document.getElementById('checkin-phase2').style.display = 'none';
   document.getElementById('checkin-phase3').style.display = 'block';
   setCheckinStep(3);
 
   const room = checkinData.room;
-  const total = parseFloat(room.price_per_day) + 100;
+  const roomCharge = parseFloat(room.price_per_day) * plannedDays;
+  const total = roomCharge + 100;
 
   document.getElementById('checkin-summary').innerHTML = `
     <div class="summary-box">
@@ -462,8 +485,12 @@ function proceedToConfirm() {
         <span>${phone || '-'}</span>
       </div>
       <div class="summary-row">
-        <span>ค่าห้อง</span>
-        <span>฿${formatMoney(room.price_per_day)}</span>
+        <span>จำนวนวันพัก</span>
+        <span>${plannedDays} วัน</span>
+      </div>
+      <div class="summary-row">
+        <span>ค่าห้อง (฿${formatMoney(room.price_per_day)} × ${plannedDays} วัน)</span>
+        <span>฿${formatMoney(roomCharge)}</span>
       </div>
       <div class="summary-row">
         <span>เงินมัดจำกุญแจ</span>
@@ -504,10 +531,11 @@ async function confirmCheckin() {
     const result = await apiPost('/checkin', {
       guest_id: guestId,
       room_id: room.room_id,
-      payment_method: guest.method
+      payment_method: guest.method,
+      planned_days: guest.plannedDays || 1
     });
 
-    showToast(`เช็คอินสำเร็จ! ห้อง ${room.room_number}`, 'success');
+    showToast(`เช็คอินสำเร็จ! ห้อง ${room.room_number} (พัก ${guest.plannedDays || 1} วัน)`, 'success');
     resetCheckinFlow();
     loadCheckinRooms();
   } catch (err) {
@@ -532,8 +560,16 @@ async function loadActiveStays() {
     container.innerHTML = stays.map(s => {
       const checkIn = new Date(s.check_in);
       const now = new Date();
+      const plannedDays = s.planned_days || 1;
       const diffHours = Math.floor((now - checkIn) / (1000 * 60 * 60));
-      const isLate = diffHours > 24;
+
+      // Calculate expected checkout based on planned_days
+      const checkInDay = new Date(checkIn);
+      checkInDay.setHours(0, 0, 0, 0);
+      const expectedCheckout = new Date(checkInDay);
+      expectedCheckout.setDate(expectedCheckout.getDate() + plannedDays);
+      expectedCheckout.setHours(12, 0, 0, 0);
+      const isLate = now > expectedCheckout;
 
       return `
         <div class="checkout-card">
@@ -559,15 +595,19 @@ async function loadActiveStays() {
             <span class="value">${formatDateTime(s.check_in)}</span>
           </div>
           <div class="detail-row">
+            <span class="label">กำหนดพัก</span>
+            <span class="value">${plannedDays} วัน (ถึง ${formatDateTime(expectedCheckout)})</span>
+          </div>
+          <div class="detail-row">
             <span class="label">ระยะเวลา</span>
-            <span class="value">${diffHours} ชั่วโมง ${isLate ? '⚠️ เกินเวลา' : ''}</span>
+            <span class="value">${diffHours} ชั่วโมง ${isLate ? '⚠️ เกินกำหนด' : ''}</span>
           </div>
           <div class="detail-row">
             <span class="label">เงินมัดจำ</span>
             <span class="value">฿100.00 (${s.deposit_status === 'PAID' ? 'ยังไม่คืน' : 'คืนแล้ว'})</span>
           </div>
           <div style="margin-top:14px;">
-            <button class="btn btn-danger" onclick="openCheckoutModal(${s.stay_id}, '${s.first_name} ${s.last_name}', '${s.room_number}', '${s.check_in}', ${s.price_per_day})">
+            <button class="btn btn-danger" onclick="openCheckoutModal(${s.stay_id}, '${s.first_name} ${s.last_name}', '${s.room_number}', '${s.check_in}', ${s.price_per_day}, ${plannedDays})">
               📤 เช็คเอาท์
             </button>
           </div>
@@ -579,16 +619,16 @@ async function loadActiveStays() {
   }
 }
 
-function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay) {
+function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay, plannedDays = 1) {
   checkoutStayId = stayId;
   const checkInDate = new Date(checkIn);
   const now = new Date();
 
-  // Calculate late fees
+  // Calculate late fees based on planned_days
   const checkInDay = new Date(checkInDate);
   checkInDay.setHours(0, 0, 0, 0);
   const expectedCheckout = new Date(checkInDay);
-  expectedCheckout.setDate(expectedCheckout.getDate() + 1);
+  expectedCheckout.setDate(expectedCheckout.getDate() + plannedDays);
   expectedCheckout.setHours(12, 0, 0, 0);
 
   let lateFee = 0;
@@ -615,15 +655,24 @@ function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay) 
         <span>${formatDateTime(checkIn)}</span>
       </div>
       <div class="summary-row">
+        <span>กำหนดพัก</span>
+        <span>${plannedDays} วัน (ถึง ${formatDateTime(expectedCheckout)})</span>
+      </div>
+      <div class="summary-row">
         <span>เช็คเอาท์</span>
         <span>${formatDateTime(now)}</span>
       </div>
       ${extraDays > 0 ? `
         <div class="summary-row" style="color:var(--danger);">
-          <span>⚠️ เกินเวลา ${extraDays} วัน</span>
+          <span>⚠️ เกินกำหนด ${extraDays} วัน</span>
           <span>+฿${formatMoney(lateFee)}</span>
         </div>
-      ` : ''}
+      ` : `
+        <div class="summary-row" style="color:var(--success);">
+          <span>✅ ไม่เกินกำหนด</span>
+          <span>ไม่มีค่าปรับ</span>
+        </div>
+      `}
     </div>
     <div style="margin-top:16px;">
       <label class="checkbox-wrap">
