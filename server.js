@@ -12,17 +12,16 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ----- MySQL Connection Pool -----
-const dbConfig = process.env.DATABASE_URL || {
-  host: process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost',
-  port: parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || '3306'),
-  user: process.env.MYSQLUSER || process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || '167349943167',
-  database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || 'mansion_pos',
+const pool = mysql.createPool({
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: '167349943167',
+  database: 'mansion_pos',
   waitForConnections: true,
   connectionLimit: 10,
   charset: 'utf8mb4'
-};
-const pool = mysql.createPool(dbConfig);
+});
 
 // ===================== GUEST API =====================
 
