@@ -12,7 +12,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ----- MySQL Connection Pool -----
-// ----- MySQL Connection Pool -----
 const dbConfig = process.env.DATABASE_URL || {
   host: process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost',
   port: parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || '3306'),
@@ -537,5 +536,5 @@ app.get('/api/dashboard', async (req, res) => {
 // ===================== START SERVER =====================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🏨 Mansion POS Server running on port ${PORT}`);
+  console.log(`Mansion POS Server running on port ${PORT}`);
 });

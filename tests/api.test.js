@@ -7,7 +7,7 @@ const BASE_URL = 'http://localhost:3000';
 
 // Helper: generate a unique national ID for test isolation
 function uniqueNationalId() {
-    return 'T' + Date.now().toString().slice(-12);
+    return Date.now().toString().slice(-13).padStart(13, '1');
 }
 
 // Track created resources for cleanup
@@ -430,7 +430,7 @@ describe('13. Encoding - Special characters in POST fields', () => {
                 first_name: 'สมชาย',
                 last_name: 'ใจดี',
                 national_id: nid,
-                phone: '081-234-5678',
+                phone: '0812345678',
                 address: '123/4 ถ.สุขุมวิท กรุงเทพฯ 10110'
             });
 

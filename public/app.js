@@ -58,7 +58,7 @@ function showToast(message, type = 'success') {
   const container = document.getElementById('toast-container');
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
-  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+  const icons = { success: '●', error: '●', warning: '●', info: '●' };
   toast.innerHTML = `<span>${icons[type] || ''}</span> ${message}`;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
@@ -158,27 +158,27 @@ async function loadDashboard() {
 
     document.getElementById('dashboard-stats').innerHTML = `
       <div class="stat-card teal">
-        <div class="stat-icon">🚪</div>
+        <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
         <div class="stat-value">${rooms.length}</div>
         <div class="stat-label">ห้องทั้งหมด</div>
       </div>
       <div class="stat-card green">
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
         <div class="stat-value">${available}</div>
         <div class="stat-label">ห้องว่าง</div>
       </div>
       <div class="stat-card blue">
-        <div class="stat-icon">🛏️</div>
+        <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <div class="stat-value">${occupied}</div>
         <div class="stat-label">มีผู้เข้าพัก</div>
       </div>
       <div class="stat-card amber">
-        <div class="stat-icon">🧹</div>
+        <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m6.41 6.41 2.83 2.83"/><path d="M2 12h4"/><path d="m6.41 17.59 2.83-2.83"/><path d="M12 18v4"/><path d="m17.59 17.59-2.83-2.83"/><path d="M18 12h4"/><path d="m17.59 6.41-2.83 2.83"/></svg></div>
         <div class="stat-value">${cleaning}</div>
         <div class="stat-label">ทำความสะอาด</div>
       </div>
       <div class="stat-card rose">
-        <div class="stat-icon">💰</div>
+        <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
         <div class="stat-value">฿${formatMoney(dashboard.today_revenue)}</div>
         <div class="stat-label">รายได้วันนี้</div>
       </div>
@@ -248,8 +248,8 @@ async function loadGuests(searchTerm = '') {
         <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${g.address || '-'}</td>
         <td>
           <div style="display:flex;gap:6px;">
-            <button class="btn btn-sm btn-secondary" onclick="editGuest(${g.guest_id})">✏️</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteGuest(${g.guest_id})">🗑️</button>
+            <button class="btn btn-sm btn-secondary" onclick="editGuest(${g.guest_id})"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteGuest(${g.guest_id})"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
           </div>
         </td>
       </tr>
@@ -360,7 +360,7 @@ async function loadCheckinRooms() {
     const rooms = await apiGet('/rooms?status=AVAILABLE');
     const container = document.getElementById('checkin-rooms');
     if (rooms.length === 0) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏠</div><p>ไม่มีห้องว่าง</p></div>';
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><p>ไม่มีห้องว่าง</p></div>';
       return;
     }
     container.innerHTML = rooms.map(r => `
@@ -404,7 +404,7 @@ async function searchGuestForCheckin() {
       container.innerHTML = `
         <div class="guest-search-result">
           <div class="guest-info-text">
-            <h4>🔄 พบผู้เข้าพักเก่า: ${g.first_name} ${g.last_name}</h4>
+            <h4>พบผู้เข้าพักเก่า: ${g.first_name} ${g.last_name}</h4>
             <p>เลขบัตร: ${g.national_id} | โทร: ${g.phone || '-'}</p>
           </div>
           <span class="badge badge-info">ผู้เข้าพักซ้ำ</span>
@@ -467,7 +467,7 @@ function proceedToConfirm() {
 
   document.getElementById('checkin-summary').innerHTML = `
     <div class="summary-box">
-      <h4>📋 สรุปการเช็คอิน</h4>
+      <h4>สรุปการเช็คอิน</h4>
       <div class="summary-row">
         <span>ห้อง</span>
         <span>${room.room_number} (${bedTypeLabel(room.bed_type)})</span>
@@ -600,7 +600,7 @@ async function loadActiveStays() {
           </div>
           <div class="detail-row">
             <span class="label">ระยะเวลา</span>
-            <span class="value">${diffHours} ชั่วโมง ${isLate ? '⚠️ เกินกำหนด' : ''}</span>
+            <span class="value">${diffHours} ชั่วโมง ${isLate ? '(เกินกำหนด)' : ''}</span>
           </div>
           <div class="detail-row">
             <span class="label">เงินมัดจำ</span>
@@ -608,7 +608,7 @@ async function loadActiveStays() {
           </div>
           <div style="margin-top:14px;">
             <button class="btn btn-danger" onclick="openCheckoutModal(${s.stay_id}, '${s.first_name} ${s.last_name}', '${s.room_number}', '${s.check_in}', ${s.price_per_day}, ${plannedDays})">
-              📤 เช็คเอาท์
+              เช็คเอาท์
             </button>
           </div>
         </div>
@@ -641,7 +641,7 @@ function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay, 
 
   document.getElementById('checkout-modal-body').innerHTML = `
     <div class="summary-box">
-      <h4>📋 สรุปการเช็คเอาท์</h4>
+      <h4>สรุปการเช็คเอาท์</h4>
       <div class="summary-row">
         <span>ผู้เข้าพัก</span>
         <span>${guestName}</span>
@@ -664,12 +664,12 @@ function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay, 
       </div>
       ${extraDays > 0 ? `
         <div class="summary-row" style="color:var(--danger);">
-          <span>⚠️ เกินกำหนด ${extraDays} วัน</span>
+          <span>เกินกำหนด ${extraDays} วัน</span>
           <span>+฿${formatMoney(lateFee)}</span>
         </div>
       ` : `
         <div class="summary-row" style="color:var(--success);">
-          <span>✅ ไม่เกินกำหนด</span>
+          <span>ไม่เกินกำหนด</span>
           <span>ไม่มีค่าปรับ</span>
         </div>
       `}
@@ -677,7 +677,7 @@ function openCheckoutModal(stayId, guestName, roomNumber, checkIn, pricePerDay, 
     <div style="margin-top:16px;">
       <label class="checkbox-wrap">
         <input type="checkbox" id="checkout-key-returned" checked>
-        <span>🔑 ผู้เข้าพักคืนกุญแจแล้ว (คืนเงินมัดจำ ฿100)</span>
+        <span>ผู้เข้าพักคืนกุญแจแล้ว (คืนเงินมัดจำ ฿100)</span>
       </label>
     </div>
     <div class="form-group" style="margin-top:14px;">
@@ -759,26 +759,26 @@ async function loadReport() {
       'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
     document.getElementById('report-content').innerHTML = `
-      <div class="section-title">📊 รายงานเดือน${thMonths[report.month]} ${report.year}</div>
+      <div class="section-title">รายงานเดือน${thMonths[report.month]} ${report.year}</div>
 
       <div class="stats-grid">
         <div class="stat-card teal">
-          <div class="stat-icon">👤</div>
+          <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
           <div class="stat-value">${s.total_guests}</div>
           <div class="stat-label">ผู้เข้าพักทั้งหมด</div>
         </div>
         <div class="stat-card blue">
-          <div class="stat-icon">🛏️</div>
+          <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
           <div class="stat-value">${s.total_stays}</div>
           <div class="stat-label">การเข้าพักทั้งหมด</div>
         </div>
         <div class="stat-card green">
-          <div class="stat-icon">🚪</div>
+          <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
           <div class="stat-value">${s.rooms_used}</div>
           <div class="stat-label">ห้องที่ถูกใช้งาน</div>
         </div>
         <div class="stat-card amber">
-          <div class="stat-icon">💰</div>
+          <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
           <div class="stat-value">฿${formatMoney(s.total_revenue)}</div>
           <div class="stat-label">รายได้รวม</div>
         </div>
@@ -786,7 +786,7 @@ async function loadReport() {
 
       <div class="report-grid">
         <div class="report-card">
-          <h4>💰 รายได้แยกตามประเภท</h4>
+          <h4>รายได้แยกตามประเภท</h4>
           <div class="report-item">
             <span class="label">ค่าห้องพัก</span>
             <span class="value">฿${formatMoney(s.room_revenue)}</span>
@@ -810,7 +810,7 @@ async function loadReport() {
         </div>
 
         <div class="report-card">
-          <h4>🛏️ แยกตามประเภทห้อง</h4>
+          <h4>แยกตามประเภทห้อง</h4>
           ${report.room_type_breakdown.length > 0 ? report.room_type_breakdown.map(rt => `
             <div class="report-item">
               <span class="label">${bedTypeLabel(rt.bed_type)} (${rt.count} ครั้ง)</span>
@@ -822,7 +822,7 @@ async function loadReport() {
 
       ${report.daily_breakdown.length > 0 ? `
         <div style="margin-top:24px;">
-          <div class="section-title">📅 รายละเอียดรายวัน</div>
+          <div class="section-title">รายละเอียดรายวัน</div>
           <div class="table-container">
             <table class="data-table">
               <thead>
