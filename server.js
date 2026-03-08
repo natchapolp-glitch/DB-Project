@@ -26,17 +26,17 @@ const pool = mysql.createPool(dbConfig);
 
 // ===================== GUEST API =====================
 
-// GET all guests (with optional search by national_id)
+// GET all guests (with optional search by national_id) — แสดงเฉพาะ is_active = 1
 app.get('/api/guests', async (req, res) => {
   try {
     const { search, national_id } = req.query;
-    let sql = 'SELECT * FROM guest';
+    let sql = 'SELECT * FROM guest WHERE is_active = 1';
     const params = [];
     if (national_id) {
-      sql += ' WHERE national_id = ?';
+      sql += ' AND national_id = ?';
       params.push(national_id);
     } else if (search) {
-      sql += ' WHERE first_name LIKE ? OR last_name LIKE ? OR national_id LIKE ? OR phone LIKE ?';
+      sql += ' AND (first_name LIKE ? OR last_name LIKE ? OR national_id LIKE ? OR phone LIKE ?)';
       const s = `%${search}%`;
       params.push(s, s, s, s);
     }
@@ -48,10 +48,10 @@ app.get('/api/guests', async (req, res) => {
   }
 });
 
-// GET single guest
+// GET single guest — แสดงเฉพาะ is_active = 1
 app.get('/api/guests/:id', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM guest WHERE guest_id = ?', [req.params.id]);
+    const [rows] = await pool.query('SELECT * FROM guest WHERE guest_id = ? AND is_active = 1', [req.params.id]);
     if (rows.length === 0) return res.status(404).json({ error: 'Guest not found' });
     res.json(rows[0]);
   } catch (err) {
@@ -74,8 +74,8 @@ app.post('/api/guests', async (req, res) => {
     if (phone && !/^\d{10}$/.test(phone)) {
       return res.status(400).json({ error: 'เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก' });
     }
-    // Check for return customer
-    const [existing] = await pool.query('SELECT * FROM guest WHERE national_id = ?', [national_id]);
+    // Check for return customer (เช็คเฉพาะ guest ที่ active อยู่)
+    const [existing] = await pool.query('SELECT * FROM guest WHERE national_id = ? AND is_active = 1', [national_id]);
     if (existing.length > 0) {
       return res.json({ ...existing[0], returning_customer: true });
     }
@@ -116,11 +116,11 @@ app.put('/api/guests/:id', async (req, res) => {
   }
 });
 
-// DELETE guest
+// DELETE guest (Soft Delete — ซ่อนแทนการลบจริง)
 app.delete('/api/guests/:id', async (req, res) => {
   try {
-    await pool.query('DELETE FROM guest WHERE guest_id = ?', [req.params.id]);
-    res.json({ message: 'Guest deleted' });
+    await pool.query('UPDATE guest SET is_active = 0 WHERE guest_id = ?', [req.params.id]);
+    res.json({ message: 'ลบผู้เข้าพักสำเร็จ' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
